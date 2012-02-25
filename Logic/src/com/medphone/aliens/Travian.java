@@ -48,7 +48,7 @@ class Travian extends AliensProcess {
 			break;
 		case 3:
 			stage = 4;
-			add_notification("Что-то я подумал что можно было бы зажрать " +
+			add_notification("Что-то я подумал{/а} что можно было бы зажрать " +
 					"травиан ещё раз как-нибудь при случае");
 			set_attr("status", "хочу травиан");
 			stage = 4;

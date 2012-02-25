@@ -1,5 +1,6 @@
 package com.medphone.aliens;
 import java.util.Hashtable;
+import java.util.Random;
 import java.util.Vector;
 
 import com.medphone.Engine;
@@ -13,6 +14,8 @@ public class AliensEngine extends Engine {
 	
 	Hashtable used_codes = new Hashtable();
 	Hashtable index_by_code = null;
+	
+	Random random = new Random();
 	
 	public void initialize() {
 		index_by_code = new Hashtable();
@@ -124,8 +127,7 @@ public class AliensEngine extends Engine {
 		String result = "";
 		String[] ss = collect_attrs("status");
 		for (int i = 0; i < ss.length; i++) {
-			if (i > 0) result += "; ";
-			result += ss[i];
+			result += ss[i] + "; ";
 		}
 		
 		

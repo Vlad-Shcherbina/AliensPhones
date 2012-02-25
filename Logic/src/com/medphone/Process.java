@@ -28,7 +28,7 @@ public abstract class Process {
 		attrs.put(key, value);
 	}
 	
-	void del_attr(String key) {
+	protected void del_attr(String key) {
 		attrs.remove(key);
 	}
 }

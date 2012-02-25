@@ -37,7 +37,7 @@ public class Main extends MIDlet implements CommandListener {
 	
 	public Main() {
 		display = Display.getDisplay(this);
-		mainScreen = new Form("");
+		mainScreen = new Form(" ");
 		ok = new Command("Ok", Command.OK, 1);
 		
 		engine.initialize();
@@ -115,7 +115,7 @@ public class Main extends MIDlet implements CommandListener {
 			code += (char)keyCode;
 			
 			if (code.length() > 8) {
-				Alert a = new Alert("", "Слишком длинный код", null, AlertType.ERROR);
+				Alert a = new Alert(" ", "Слишком длинный код", null, AlertType.ERROR);
 				a.setTimeout(1000);
 				a.getType().playSound(display);
 				display.setCurrent(a, mainScreen);
@@ -163,7 +163,7 @@ public class Main extends MIDlet implements CommandListener {
 	}
 	
 	void notify(String s) {
-		Alert a = new Alert("", s, null, AlertType.ALARM);
+		Alert a = new Alert(" ", s, null, AlertType.ALARM);
 		a.setTimeout(Alert.FOREVER);
 		a.setCommandListener(this);
 		a.addCommand(ok);
@@ -173,7 +173,7 @@ public class Main extends MIDlet implements CommandListener {
 	}
 	
 	void beep() {
-		Alert a = new Alert("", "Проверь статус", null, AlertType.ALARM);
+		Alert a = new Alert(" ", "Проверь статус", null, AlertType.ALARM);
 		a.setTimeout(300);
 		a.getType().playSound(display);
 		

@@ -14,8 +14,8 @@ class AliensTables {
 		"Cross", new Boolean(true), new Integer(27677), 
 		"Safe", new Boolean(true), new Integer(7233), 
 		"Resp", new Boolean(true), new Integer(7377), 
-		"SampleProcess", new Boolean(false), new Integer(42), new Integer(43), new Integer(44), new Integer(45), 
-		"Surfactant", new Boolean(false), new Integer(666), new Integer(667), new Integer(668), 
+		"SampleProcess", new Boolean(false), new Integer(223456), new Integer(654321), 
+		"Surfactant", new Boolean(false), new Integer(42), new Integer(43), new Integer(44), new Integer(45), 
 		"Antialvin", new Boolean(false), new Integer(333), new Integer(334), new Integer(335), 
 		"Travian", new Boolean(false), new Integer(999), new Integer(998), new Integer(997), new Integer(996), new Integer(995), new Integer(994), new Integer(993), new Integer(992), new Integer(991), new Integer(990), 
 	};

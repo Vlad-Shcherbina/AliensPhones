@@ -57,5 +57,5 @@ class AliensTables {
 }
 """
 
-with open('com/medphone/aliens/AliensTables.java', 'w') as fout:
+with open('src/com/medphone/aliens/AliensTables.java', 'w') as fout:
     print>>fout, template%(''.join(result), ''.join(cases))
