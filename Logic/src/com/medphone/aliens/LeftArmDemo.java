@@ -9,6 +9,7 @@ public class LeftArmDemo extends AliensProcess {
 	public void event() {
 		switch (stage) {
 		case 0:
+			a().cancel_process(get_name());
 			add_notification("Пуля обожгла мне левую руку, " +
 					"но не причинила существенного вреда."); 
 			add_notification("А вот костюм безнадёжно испорчен :(");

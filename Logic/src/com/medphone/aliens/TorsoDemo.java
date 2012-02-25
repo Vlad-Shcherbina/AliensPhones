@@ -9,6 +9,7 @@ public class TorsoDemo extends AliensProcess {
 	public void event() {
 		switch (stage) {
 		case 0:
+			a().cancel_process(get_name());
 			add_notification(
 					"Достаю из кармана портсигар и целую его; " +
 					"он разбит пулей.");
