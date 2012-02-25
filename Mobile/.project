@@ -3,6 +3,7 @@
 	<name>Mobile</name>
 	<comment></comment>
 	<projects>
+		<project>Logic</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
