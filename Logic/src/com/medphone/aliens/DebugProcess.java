@@ -1,6 +1,4 @@
 package com.medphone.aliens;
-import com.medphone.Engine;
-import com.medphone.Engine.Event;
 
 
 class DebugProcess extends AliensProcess {

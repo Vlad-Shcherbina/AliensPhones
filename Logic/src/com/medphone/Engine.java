@@ -1,5 +1,6 @@
 package com.medphone;
 
+import java.util.Random;
 import java.util.Vector;
 
 
@@ -13,6 +14,15 @@ public abstract class Engine {
 	public abstract void receive_code(int code);
 	
 	public abstract void initialize();
+
+	Random random = new Random();
+	
+	public int rand(int n) {
+		int x = random.nextInt();
+		if (x < 0) x = -x;
+		if (x < 0) x = 0; // it is possible for minint
+		return x%n;
+	}
 	
 	public static class Event {
 		public int t;

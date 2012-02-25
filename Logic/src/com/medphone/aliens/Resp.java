@@ -8,9 +8,9 @@ class Resp extends AliensProcess {
 
 	public void event() {
 		if (a().air != a().RESP)
-			add_notification("Я надел{/а} респиратор и выш{ел/ла} в коридоры");
+			add_notification("Я надел{/а} респиратор и выш{ел/ла} в коридоры.");
 		else
-			add_notification("Я уже в респираторе");
+			add_notification("Я уже в респираторе.");
 		a().air = a().RESP;
 	}
 

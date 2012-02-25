@@ -10,7 +10,7 @@ class Travian extends AliensProcess {
 		switch (stage) {
 		case 0:
 			a().cancel_process(get_name());
-			add_notification("Я закатал{/а} лепёшку травиана под язык");
+			add_notification("Я закатал{/а} лепёшку травиана под язык.");
 			set_attr("status", "я изредка пошевеливаю пальцами, как будто играю на пианино");
 			stage = 1;
 			schedule(4);
@@ -49,7 +49,7 @@ class Travian extends AliensProcess {
 		case 3:
 			stage = 4;
 			add_notification("Что-то я подумал{/а} что можно было бы зажрать " +
-					"травиан ещё раз как-нибудь при случае");
+					"травиан ещё раз как-нибудь при случае.");
 			set_attr("status", "хочу травиан");
 			stage = 4;
 			schedule(4);

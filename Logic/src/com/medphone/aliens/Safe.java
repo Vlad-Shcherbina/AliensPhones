@@ -8,9 +8,9 @@ class Safe extends AliensProcess {
 
 	public void event() {
 		if (a().air != a().SAFE)
-			add_notification("Я вернул{ся/ась} в помещение с фильтруемым воздухом");
+			add_notification("Я вернул{ся/ась} в помещение с фильтруемым воздухом.");
 		else
-			add_notification("Я уже в помещении с фильтруемым воздухом");
+			add_notification("Я уже в помещении с фильтруемым воздухом.");
 		a().air = a().SAFE;
 	}
 

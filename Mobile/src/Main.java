@@ -19,7 +19,7 @@ import com.medphone.aliens.AliensEngine;
 
 public class Main extends MIDlet implements CommandListener {
 
-	static final int TICK_DURATION = 15*1000;
+	static final int TICK_DURATION = 10*1000;
 	static final int NOTIFICATION = 5*1000;
 	
 	private Display display;
@@ -61,7 +61,6 @@ public class Main extends MIDlet implements CommandListener {
 	synchronized void tick() {
 		need_tick = false;
 		tick_result = engine.tick();
-		setMainText(tick_result.status);
 		pendingStuff();
 	}
 	
@@ -146,8 +145,12 @@ public class Main extends MIDlet implements CommandListener {
 				code = "";
 			}
 		}
-		if ((char)keyCode == '#') {
-			code = "";			
+		if (keyCode == (int)'#' || keyCode == (int)'*') {
+			code = "";
+		}
+		if (keyCode < 0) {
+			if (code.length() > 0)
+				code = code.substring(0, code.length()-1);
 		}
 		
 		if (code.equals(""))
@@ -173,7 +176,7 @@ public class Main extends MIDlet implements CommandListener {
 	}
 	
 	void beep() {
-		Alert a = new Alert(" ", "Проверь статус", null, AlertType.ALARM);
+		Alert a = new Alert(" ", "Перечитай текст", null, AlertType.ALARM);
 		a.setTimeout(300);
 		a.getType().playSound(display);
 		

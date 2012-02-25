@@ -14,9 +14,7 @@ public class AliensEngine extends Engine {
 	
 	Hashtable used_codes = new Hashtable();
 	Hashtable index_by_code = null;
-	
-	Random random = new Random();
-	
+		
 	public void initialize() {
 		index_by_code = new Hashtable();
 		Object[] t = AliensTables.codes;
@@ -78,7 +76,7 @@ public class AliensEngine extends Engine {
 	}
 	
 	static final int SAFE = 0;
-	static final int MORON = 1;
+	static final int GASP = 1;
 	static final int RESP = 2;
 	static final int MASK = 3;
 	int air = SAFE;
@@ -130,7 +128,6 @@ public class AliensEngine extends Engine {
 			result += ss[i] + "; ";
 		}
 		
-		
 		if (lungs < 25)
 			result += ic("боль в груди, кашель с кровью; ");
 		else if (lungs < 50)
@@ -140,8 +137,9 @@ public class AliensEngine extends Engine {
 		else if (lungs < 100)
 			result += ic("хрипы, затруднённое дыхание; ");
 		
-		
-		if (air == RESP)
+		if (air == GASP)
+			result += "дышу нефильтрованным воздухом; ";
+		else if (air == RESP)
 			result += "дышу через респиратор; ";
 		else if (air == MASK)
 			result += "дышу через полную маску; ";
@@ -154,10 +152,11 @@ public class AliensEngine extends Engine {
 	protected void idle() {
 		time++;
 		
+		/*
 		int dmg = 0;
 		if (air == SAFE)
 			lungs_renewable++;
-		else if (air == MORON)
+		else if (air == GASP)
 			dmg = 2;
 		else if (air == RESP)
 			dmg = 1;
@@ -180,7 +179,7 @@ public class AliensEngine extends Engine {
 			lungs = 120;
 		
 		if (lungs < 0)
-			die("Мои лёгкие превратились в говно и я задохнул{ся/ась}");
+			die("Мои лёгкие превратились в говно и я задохнул{ся/ась}");*/
 		
 	}
 	

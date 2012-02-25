@@ -1,16 +1,28 @@
 codes_dir = 'codes/'
 
 reusable = [
-    "DebugProcess",
+    #"DebugProcess",
     "Cross",
     "Safe",
+    "Gasp",
     "Resp",
+    "Mask",
+
+    "YellowDemo",
+    "BlueDemo",
+
+    "LeftArmDemo",
+    "RightArmDemo",
+    "LeftLegDemo",
+    "RightLegDemo",
+    "TorsoDemo",
 ]
 unique = [
-    "SampleProcess",
-    "Surfactant",
-    "Antialvin",
-    "Travian",
+    #"SampleProcess",
+    #"Surfactant",
+    #"Antialvin",
+    #"Travian",
+    "Sambuca",
 ]
 
 result = []
@@ -18,7 +30,15 @@ other_codes = []
 for name in reusable+unique:
     print name
     result.append('\t\t"{}", new Boolean({}), '.format(name, str(name in reusable).lower()))
-    codes = open('codes/{}'.format(name)).readlines()
+
+    file_name = name
+    if name in reusable:
+        file_name = 'reusable/'+file_name
+    file_name = 'codes/'+file_name
+    if file_name.endswith('Demo'):
+        file_name = file_name[:-4]
+
+    codes = open(file_name).readlines()
     for code in codes:
         code = code.strip()
         assert not code.startswith('0'), code
