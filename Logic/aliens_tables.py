@@ -1,3 +1,15 @@
+def phoneword(s):
+    t = 'abc,def,ghi,jkl,mno,pqrs,tuv,wxyz'.split(',')
+    result = ''
+    for c in s:
+        for i, key in enumerate(t, 2):
+            if c in key:
+                result += str(i)
+                break
+        else:
+            result += c
+    return result
+        
 codes_dir = 'codes/'
 
 reusable = [
@@ -41,6 +53,7 @@ for name in reusable+unique:
     codes = open(file_name).readlines()
     for code in codes:
         code = code.strip()
+        code = phoneword(code)
         assert not code.startswith('0'), code
         for c in other_codes:
             assert not code.startswith(c), (code, c)
