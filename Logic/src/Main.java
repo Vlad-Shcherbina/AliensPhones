@@ -9,6 +9,21 @@ import com.medphone.aliens.AliensEngine;
 
 
 public final class Main {
+	
+	static int phonewordToCode(String s) {
+		String[] keys = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+		int result = 0;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			for (int j = 0; j < keys.length; j++)
+				if (keys[j].indexOf(c) != -1) {
+					result *= 10;
+					result += 2+j;
+					break;
+				}
+		}
+		return result;
+	}
 
 	static void processCode(int code) {
 	
@@ -83,13 +98,6 @@ public final class Main {
 	
 	public static void main(String[] args) throws IOException {
 
-		
-		//Hashtable h = new Hashtable();
-		//h.put(new Integer(1), new Integer(2));
-		//System.out.println(h.containsKey(new Integer(1)));
-		//return;
-		
-		
 		in = new BufferedReader(new InputStreamReader(System.in));
 		out = new PrintStream(System.out, true, "866");
 		
@@ -114,6 +122,7 @@ public final class Main {
 				out.println("    wait - wait for something interesting");
 				out.println("    wait <time in minutes> - wait N minutes, but stop when something interesting happens");
 				out.println("    sleep <time in minutes> - wait all the period no matter what would happen");
+				out.println("    <phoneword> - well, enter phoneword");
 				continue;
 			}
 			
@@ -150,7 +159,12 @@ public final class Main {
 				}
 			}
 			
-			out.println("Unrecognized command (type 'help' for list of supported commands).");
+			int code = phonewordToCode(s);
+			out.println("phoneword "+code);
+			processCode(code);
+			continue;
+			
+			//out.println("Unrecognized command (type 'help' for list of supported commands).");
 		}
 	}
 }
