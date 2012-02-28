@@ -1,12 +1,8 @@
 package com.medphone.aliens;
 import java.util.Hashtable;
-import java.util.Random;
-import java.util.Vector;
 
 import com.medphone.Engine;
 import com.medphone.Process;
-import com.medphone.Engine.Event;
-import com.medphone.Engine.TickResult;
 
 
 
@@ -143,7 +139,7 @@ public class AliensEngine extends Engine {
 			result += "дышу через респиратор; ";
 		else if (air == MASK)
 			result += "дышу через полную маску; ";
-		
+				
 		if (result.equals(""))
 			result = "жалоб нет";
 		return result;

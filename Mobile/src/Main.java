@@ -39,12 +39,7 @@ public class Main extends MIDlet implements CommandListener {
 		display = Display.getDisplay(this);
 		mainScreen = new Form(" ");
 		ok = new Command("Ok", Command.OK, 1);
-		
-		engine.initialize();
-	}
-	
-	protected void startApp() throws MIDletStateChangeException {
-		
+
 		mainScreen.append(new KeyCatcher());
 		mainScreen.append("status");
 		mainScreen.append(new KeyCatcher());
@@ -53,9 +48,14 @@ public class Main extends MIDlet implements CommandListener {
 
 		timer = new Timer();
 		
-		display.setCurrent(mainScreen);
+		engine.initialize();
 
 		tick();
+	}
+	
+	protected void startApp() throws MIDletStateChangeException {
+		
+		display.setCurrent(mainScreen);
 	}
 	
 	synchronized void tick() {
