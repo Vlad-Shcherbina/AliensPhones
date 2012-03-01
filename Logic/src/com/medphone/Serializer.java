@@ -1,13 +1,56 @@
 package com.medphone;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Vector;
 
 public class Serializer {
 
 	Vector strings = new Vector();
+	
+	public byte[] getBytes() {
+		String result = "";
+		for (int i = 0; i < strings.size(); i++) {
+			String s = (String)strings.elementAt(i);
+			if (s.indexOf('\n') != -1)
+				throw new RuntimeException("newlines in strings");
+			result += s+"\n";
+		}
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		DataOutputStream dos = new DataOutputStream(baos);
+		try {
+			dos.writeUTF(result);
+		} catch (IOException e) {
+			System.out.println("Serialization error: "+e);
+		}
+
+		return baos.toByteArray();
+	}
+	
+	public void setBytes(byte[] data) {
+		ByteArrayInputStream bais = new ByteArrayInputStream(data);
+		DataInputStream dis = new DataInputStream(bais);
+		String s;
+		try {
+			s = dis.readUTF();
+		} catch (IOException e) {
+			System.out.println("Deserialization error: "+e);
+			s = "\n";
+		}
+		int i = 0;
+		while (i < s.length()) {
+			int j = s.indexOf("\n", i);
+			if (j == -1)
+				throw new RuntimeException("Deserialization: newline not found");
+			strings.addElement(s.substring(i, j));
+			i = j+1;
+		}
+	}
 	
 	public void print() {
 		for (int i = 0; i < strings.size(); i++) {
@@ -16,15 +59,15 @@ public class Serializer {
 	}
 	
 	public void writeString(String s) {
-		strings.add(s);
+		strings.addElement(s);
 	}
 	
 	public void writeInt(int i) {
-		strings.add(""+i);
+		writeString(""+i);
 	}
 	
 	public void writeInt(String name, int i) {
-		strings.add(name+" = "+i);
+		writeString(name+" = "+i);
 	}
 	
 	public void writeBool(boolean b, String t, String f) {
@@ -46,7 +89,10 @@ public class Serializer {
 	}
 	
 	public String readString() {
-		return (String)strings.remove(0); // potentially quadratic, but who cares?
+		// potentially quadratic, but who cares?
+		String result = (String)strings.elementAt(0);
+		strings.removeElementAt(0);
+		return result;
 	}
 	
 	public int readInt() {

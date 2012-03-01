@@ -54,6 +54,8 @@ public class AliensEngine extends Engine {
 	}
 
 	public void reset() {
+		super.reset();
+		
 		used_codes = new Hashtable();
 		
 		time = 0;

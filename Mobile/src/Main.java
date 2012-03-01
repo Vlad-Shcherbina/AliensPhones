@@ -13,8 +13,12 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.StringItem;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
+import javax.microedition.rms.RecordEnumeration;
+import javax.microedition.rms.RecordStore;
+import javax.microedition.rms.RecordStoreException;
 
 import com.medphone.Engine;
+import com.medphone.Serializer;
 import com.medphone.aliens.AliensEngine;
 
 public class Main extends MIDlet implements CommandListener {
@@ -28,6 +32,7 @@ public class Main extends MIDlet implements CommandListener {
 	
 	private Command ok;
 	
+	private String status = "status";
 	private String code = "";
 	
 	Engine engine = new AliensEngine();
@@ -41,7 +46,7 @@ public class Main extends MIDlet implements CommandListener {
 		ok = new Command("Ok", Command.OK, 1);
 
 		mainScreen.append(new KeyCatcher());
-		mainScreen.append("status");
+		mainScreen.append(status);
 		mainScreen.append(new KeyCatcher());
 
 		mainScreen.setCommandListener(this);
@@ -50,30 +55,45 @@ public class Main extends MIDlet implements CommandListener {
 		
 		engine.initialize();
 
-		tick();
-	}
-	
-	protected void startApp() throws MIDletStateChangeException {
-		
-		display.setCurrent(mainScreen);
-	}
-	
-	synchronized void tick() {
+		try {
+			Serializer ser = new Serializer();
+			byte[] data = loadRecord();
+			System.out.println("loaded "+data.length+" bytes");
+			ser.setBytes(data);
+			engine.deserialize(ser);
+			System.out.println("deserialization ok");
+			
+			tick_result = engine.tick();
+		} catch (Exception e) {
+			System.out.println("Loading or deserialization error: "+e);
+			engine.reset();
+			
+			tick_result = engine.tick();
+			
+			tick_result.notifications.insertElementAt("Эта версия запущена в первый раз!", 0);
+		}
 		need_tick = false;
-		tick_result = engine.tick();
+	}	
+	
+	synchronized protected void startApp() throws MIDletStateChangeException {
+		timer.cancel();
+		timer = new Timer();
+		display.setCurrent(mainScreen);
 		pendingStuff();
 	}
-	
+		
 	synchronized void pendingStuff() {
 		if (tick_result.notifications.size() == 0) {
+			status = tick_result.status;
 			if (tick_result.importance_flag) {
 				code = "";
-				setMainText(tick_result.status);
+				
+				setMainText(status);
 				beep();
 			}
 			else
 				if (code.equals(""))
-					setMainText(tick_result.status);
+					setMainText(status);
 			need_tick = true;
 			timer.schedule(new TestTimerTask(), TICK_DURATION);
 		}
@@ -100,12 +120,24 @@ public class Main extends MIDlet implements CommandListener {
 		}
 	}
 	
+	synchronized void tick() {
+		Serializer ser = new Serializer();
+		engine.serialize(ser);
+		saveRecord(ser.getBytes());
+		
+		need_tick = false;
+		tick_result = engine.tick();
+		pendingStuff();
+	}
+	
 	private class TestTimerTask extends TimerTask {
 		public final void run() {
-			if (need_tick)
-				tick();
-			else
-				pendingStuff();
+			synchronized (Main.this) {
+				if (need_tick)
+					tick();
+				else
+					pendingStuff();
+			}
 		}
 	}
 
@@ -154,7 +186,7 @@ public class Main extends MIDlet implements CommandListener {
 		}
 		
 		if (code.equals(""))
-			setMainText(tick_result.status);
+			setMainText(status);
 		else
 			setMainText("Код: "+code+"...");
 	}
@@ -181,6 +213,46 @@ public class Main extends MIDlet implements CommandListener {
 		a.getType().playSound(display);
 		
 		display.setCurrent(a, mainScreen);		
+	}
+
+	byte[] loadRecord() {
+		byte[] result = null;
+		try {
+			RecordStore rs = RecordStore.openRecordStore("state", true);
+			
+			RecordEnumeration re = rs.enumerateRecords(null, null, false);
+			while (re.hasNextElement()) {
+				System.out.println("reading record");
+				result = re.nextRecord();
+				break;
+			}
+			rs.closeRecordStore();
+		} catch (RecordStoreException e) {
+			System.out.println("RS read problem "+e);
+		}
+		return result;
+	}
+	
+	void saveRecord(byte[] data) {
+		try {
+			RecordStore rs = RecordStore.openRecordStore("state", true);
+			
+			RecordEnumeration re = rs.enumerateRecords(null, null, false);
+			int cnt = 0;
+			while (re.hasNextElement()) {
+				int id = re.nextRecordId();
+				System.out.println("writing record");
+				rs.setRecord(id, data, 0, data.length);
+				cnt++;
+			}
+			if (cnt == 0) {
+				System.out.println("creating record");
+				rs.addRecord(data, 0, data.length);
+			}
+			rs.closeRecordStore();
+		} catch (RecordStoreException e) {
+			System.out.println("RS write problem "+e);
+		}
 	}
 	
 	class KeyCatcher extends CustomItem {
