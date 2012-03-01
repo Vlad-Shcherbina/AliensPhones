@@ -13,7 +13,8 @@ def phoneword(s):
 codes_dir = 'codes/'
 
 reusable = [
-    #"DebugProcess",
+    "Reset",
+
     "Cross",
     "Safe",
     "Gasp",
