@@ -80,11 +80,11 @@ package com.medphone.aliens;
 
 import com.medphone.Process;
 
-class AliensTables {
+public class AliensTables {
 	static final Object[] codes = {
 %s	};
 	
-	static Process create_process(String name) {
+	public static Process createProcess(String name) {
 %s		return null;
 	}
 }

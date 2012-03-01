@@ -24,6 +24,41 @@ public abstract class Engine {
 		return x%n;
 	}
 	
+	public void reset() {
+		queue = new Vector();
+		male = true;
+	}
+	
+	public void serialize(Serializer ser) {
+		ser.writeBool(male, "male", "female");
+		ser.writeInt("queue size", queue.size());
+		for (int i = 0; i < queue.size(); i++) {
+			Event e = (Event)queue.elementAt(i);
+			ser.writeInt("t", e.t);
+			ser.writeString(e.process.get_name());
+			ser.writeInt("stage", e.process.stage);
+			ser.writeDict(e.process.attrs);
+		}
+	}
+	
+	public void deserialize(Serializer ser) {
+		male = ser.readBool("male", "female");
+		int queue_size = ser.readInt("queue size");
+		queue = new Vector();
+		for (int i = 0; i < queue_size; i++) {
+			
+			int t = ser.readInt("t");
+			// TODO: decouple from aliens stuff
+			Process p = com.medphone.aliens.AliensTables.createProcess(ser.readString());
+			p.stage = ser.readInt("stage");
+			p.attrs = ser.readDict();
+			schedule(p, t);
+		}
+	}
+	
+	void deserialize() {
+	}	
+	
 	public static class Event {
 		public int t;
 		public Process process;
@@ -31,6 +66,7 @@ public abstract class Engine {
 	
 	protected Vector queue = new Vector();
 	
+
 	protected void schedule(Process process, int dt) {
 		process.engine = this;
 		Event q = new Event();
@@ -56,8 +92,6 @@ public abstract class Engine {
 		public String status;
 		public boolean importance_flag;
 	}
-	
-	int t = 0;	
 	
 	TickResult result;
 	
@@ -102,8 +136,6 @@ public abstract class Engine {
 		
 		idle();
 		
-		t += 1;
-		
 		for (int i = 0; i < queue.size(); i++)
 			((Event)queue.elementAt(i)).t--;
 		
@@ -119,12 +151,6 @@ public abstract class Engine {
 		
 		result = null;
 		return res;
-	}
-	
-	void serialize() {
-	}
-	
-	void deserialize() {
 	}
 	
 	public boolean male = true;

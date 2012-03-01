@@ -3,12 +3,13 @@ import java.util.Hashtable;
 
 import com.medphone.Engine;
 import com.medphone.Process;
+import com.medphone.Serializer;
 
 
 
 public class AliensEngine extends Engine {
 	
-	Hashtable used_codes = new Hashtable();
+	Hashtable used_codes;
 	Hashtable index_by_code = null;
 		
 	public void initialize() {
@@ -20,11 +21,11 @@ public class AliensEngine extends Engine {
 				idx = i;
 			else if (t[i] instanceof Integer)
 				index_by_code.put(t[i], new Integer(idx));
-		return;
+		reset();
 	}
-	
+		
 	public int code_status(int code) {
-		if (used_codes.containsKey(new Integer(code)))
+		if (used_codes.containsKey(""+code))
 			return USED_CODE;
 		if (index_by_code.containsKey(new Integer(code)))
 			return VALID_CODE;
@@ -41,15 +42,51 @@ public class AliensEngine extends Engine {
 		boolean reusable = ((Boolean)t[idx+1]).booleanValue();
 		
 		if (!reusable)
-			used_codes.put(new Integer(code), new Integer(42));
+			used_codes.put(""+code, "used");
 		
-		Process p = AliensTables.create_process(name);
+		Process p = AliensTables.createProcess(name);
 		
 		if (p != null) {
 			if (!p.get_name().equals(name))
 				System.out.println("********* SHIT!!!!!! "+name);
 			schedule(p, 0);
 		}
+	}
+
+	public void reset() {
+		used_codes = new Hashtable();
+		
+		time = 0;
+		
+		alive = true;
+		
+		air = SAFE;
+		lungs = 120;
+		lungs_renewable = 120;
+	}
+	
+	public void serialize(Serializer ser) {
+		ser.writeInt("time", time);
+		ser.writeBool(alive, "alive", "dead");
+		ser.writeInt("air", air);
+		ser.writeInt("lungs", lungs);
+		ser.writeInt("lungs_renewable", lungs_renewable);
+		
+		super.serialize(ser);
+
+		ser.writeDict(used_codes);
+	}
+	
+	public void deserialize(Serializer ser) {
+		time = ser.readInt("time");
+		alive = ser.readBool("alive", "dead");
+		air = ser.readInt("air");
+		lungs = ser.readInt("lungs");
+		lungs_renewable = ser.readInt("lungs_renewable");
+		
+		super.deserialize(ser);
+		
+		used_codes = ser.readDict();
 	}
 	
 	boolean has_process(String name) {
@@ -70,17 +107,19 @@ public class AliensEngine extends Engine {
 			}
 		}		
 	}
+
+	int time;
 	
 	static final int SAFE = 0;
 	static final int GASP = 1;
 	static final int RESP = 2;
 	static final int MASK = 3;
-	int air = SAFE;
+	int air;
 	
-	int lungs = 120;
-	int lungs_renewable = 120;
+	int lungs;
+	int lungs_renewable;
 		
-	boolean alive = true;
+	boolean alive;
 	
 	void die() {
 		die("Я умер{/ла}");
@@ -93,9 +132,7 @@ public class AliensEngine extends Engine {
 		}
 		alive = false;
 	}
-	
-	int time = 0;
-	
+		
 	public String get_debug_info() {
 		String s = "";
 		

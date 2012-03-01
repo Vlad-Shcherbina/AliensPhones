@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Hashtable;
 
 import com.medphone.Engine;
+import com.medphone.Serializer;
 import com.medphone.Engine.TickResult;
 import com.medphone.aliens.AliensEngine;
 
@@ -157,6 +158,27 @@ public final class Main {
 				}
 				catch (NumberFormatException e) {
 				}
+			}
+			
+			if (s.equals("reset")) {
+				engine.reset();
+				continue;
+			}
+			
+			if (s.equals("dump")) {
+				Serializer ser = new Serializer();
+				engine.serialize(ser);
+				ser.print();
+				continue;
+			}
+			
+			if (s.equals("ser")) {
+				Serializer ser = new Serializer();
+				engine.serialize(ser);
+				ser.print();
+				engine.reset();
+				engine.deserialize(ser);
+				continue;
 			}
 			
 			int code = phonewordToCode(s);
