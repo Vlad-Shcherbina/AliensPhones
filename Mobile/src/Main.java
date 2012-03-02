@@ -29,6 +29,7 @@ public class Main extends MIDlet implements CommandListener {
 	private Display display;
 	private Form mainScreen;
 	private Timer timer;
+	private TimerTask timerTask = null;
 	
 	private Command ok;
 	
@@ -76,8 +77,7 @@ public class Main extends MIDlet implements CommandListener {
 	}	
 	
 	synchronized protected void startApp() throws MIDletStateChangeException {
-		timer.cancel();
-		timer = new Timer();
+		cancelTimerTask();
 		display.setCurrent(mainScreen);
 		pendingStuff();
 	}
@@ -85,28 +85,41 @@ public class Main extends MIDlet implements CommandListener {
 	synchronized void pendingStuff() {
 		if (tick_result.notifications.size() == 0) {
 			status = tick_result.status;
+			
 			if (tick_result.importance_flag) {
 				code = "";
-				
 				setMainText(status);
-				beep();
+
+				Alert a = new Alert(" ", "Перечитай текст", null, AlertType.ALARM);
+				a.setTimeout(300);
+				
+				display.setCurrent(a, mainScreen);		
+				a.getType().playSound(display);
 			}
 			else
 				if (code.equals(""))
 					setMainText(status);
+			
 			need_tick = true;
-			timer.schedule(new TestTimerTask(), TICK_DURATION);
+			schedule(TICK_DURATION);
 		}
 		else {
 			notify((String)tick_result.notifications.elementAt(0));
-			timer.schedule(new TestTimerTask(), NOTIFICATION);
+			schedule(NOTIFICATION);
+		}
+	}
+	
+	synchronized void cancelTimerTask() {
+		if (timerTask != null) {
+			timerTask.cancel();
+			timerTask = null;
 		}
 	}
 	
 	synchronized void schedule(int dt) {
-		timer.cancel();
-		timer = new Timer();
-		timer.schedule(new TestTimerTask(), dt);
+		cancelTimerTask();
+		timerTask = new TestTimerTask();
+		timer.schedule(timerTask, dt);
 	}
 		
 	synchronized public void commandAction(Command command, Displayable displayable) {
@@ -114,8 +127,7 @@ public class Main extends MIDlet implements CommandListener {
 			if (tick_result.notifications.size() > 0)
 				tick_result.notifications.removeElementAt(0);
 			display.setCurrent(mainScreen);
-			timer.cancel();
-			timer = new Timer();
+			cancelTimerTask();
 			pendingStuff();
 		}
 	}
@@ -148,32 +160,30 @@ public class Main extends MIDlet implements CommandListener {
 			if (code.length() > 8) {
 				Alert a = new Alert(" ", "Слишком длинный код", null, AlertType.ERROR);
 				a.setTimeout(1000);
-				a.getType().playSound(display);
 				display.setCurrent(a, mainScreen);
+				a.getType().playSound(display);
 				code = "";				
 			}
 			else
 			try {
 				int c = Integer.parseInt(code);
 				int code_status = engine.code_status(c);
-				//System.out.println("Code "+c+", code status "+code_status);
 				if (code_status == engine.USED_CODE) {
 					Alert a = new Alert(code, "Код уже использовался", null, AlertType.ERROR);
 					a.setTimeout(1000);
-					a.getType().playSound(display);
 					display.setCurrent(a, mainScreen);
+					a.getType().playSound(display);
 					code = "";
 				}
 				else if (code_status == engine.VALID_CODE) {
-					beep();
 					code = "";
 					engine.receive_code(c);
-					timer.cancel();
-					timer = new Timer();
+					cancelTimerTask();
 					tick();
 				}
 			}
 			catch (NumberFormatException e) {
+				System.out.println("Number format exception in code: "+e);
 				code = "";
 			}
 		}
@@ -202,19 +212,11 @@ public class Main extends MIDlet implements CommandListener {
 		a.setTimeout(Alert.FOREVER);
 		a.setCommandListener(this);
 		a.addCommand(ok);
-		a.getType().playSound(display);
 		
-		display.setCurrent(a, mainScreen);
+		display.setCurrent(a);
+		a.getType().playSound(display);
 	}
 	
-	void beep() {
-		Alert a = new Alert(" ", "Перечитай текст", null, AlertType.ALARM);
-		a.setTimeout(300);
-		a.getType().playSound(display);
-		
-		display.setCurrent(a, mainScreen);		
-	}
-
 	byte[] loadRecord() {
 		byte[] result = null;
 		try {

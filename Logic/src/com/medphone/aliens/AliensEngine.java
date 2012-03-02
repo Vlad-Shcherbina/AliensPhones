@@ -68,6 +68,10 @@ public class AliensEngine extends Engine {
 	}
 	
 	public void serialize(Serializer ser) {
+		// TODO: remove in release
+		for (int i = 0; i < 200; i++)
+			ser.writeString("zzz whatever");
+		
 		ser.writeInt("time", time);
 		ser.writeBool(alive, "alive", "dead");
 		ser.writeInt("air", air);
@@ -80,6 +84,10 @@ public class AliensEngine extends Engine {
 	}
 	
 	public void deserialize(Serializer ser) {
+		for (int i = 0; i < 200; i++)
+			if (!ser.readString().equals("zzz whatever"))
+				throw new RuntimeException("zzz whatever");
+		
 		time = ser.readInt("time");
 		alive = ser.readBool("alive", "dead");
 		air = ser.readInt("air");
