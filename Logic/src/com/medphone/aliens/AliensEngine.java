@@ -48,10 +48,28 @@ public class AliensEngine extends Engine {
 		
 		if (p != null) {
 			if (!p.get_name().equals(name))
-				System.out.println("********* SHIT!!!!!! "+name);
+				System.out.println("********* SHIT! CLASS NAME! "+name);
 			schedule(p, 0);
 		}
 	}
+
+	int time;
+	
+	static final int SAFE = 0;
+	static final int GASP = 1;
+	static final int RESP = 2;
+	static final int MASK = 3;
+	int air;
+	
+	int lungs;
+	int lungsRenewable;
+	
+	boolean poisoning;
+	
+	int liver;
+	int kidneys;
+		
+	boolean alive;
 
 	public void reset() {
 		super.reset();
@@ -64,19 +82,25 @@ public class AliensEngine extends Engine {
 		
 		air = SAFE;
 		lungs = 120;
-		lungs_renewable = 120;
+		lungsRenewable = 120;
+		poisoning = false;
+		
+		liver = 600;
+		kidneys = 600;
 	}
 	
 	public void serialize(Serializer ser) {
-		// TODO: remove in release
-		for (int i = 0; i < 200; i++)
-			ser.writeString("zzz whatever");
+		//for (int i = 0; i < 200; i++)
+		//	ser.writeString("zzz whatever");
 		
 		ser.writeInt("time", time);
 		ser.writeBool(alive, "alive", "dead");
 		ser.writeInt("air", air);
 		ser.writeInt("lungs", lungs);
-		ser.writeInt("lungs_renewable", lungs_renewable);
+		ser.writeInt("lungs_renewable", lungsRenewable);
+		ser.writeBool(poisoning, "poisoning", "no poisoning");
+		ser.writeInt("liver", liver);
+		ser.writeInt("kidneys", kidneys);
 		
 		super.serialize(ser);
 
@@ -84,15 +108,18 @@ public class AliensEngine extends Engine {
 	}
 	
 	public void deserialize(Serializer ser) {
-		for (int i = 0; i < 200; i++)
-			if (!ser.readString().equals("zzz whatever"))
-				throw new RuntimeException("zzz whatever");
+		//for (int i = 0; i < 200; i++)
+		//	if (!ser.readString().equals("zzz whatever"))
+		//		throw new RuntimeException("zzz whatever");
 		
 		time = ser.readInt("time");
 		alive = ser.readBool("alive", "dead");
 		air = ser.readInt("air");
 		lungs = ser.readInt("lungs");
-		lungs_renewable = ser.readInt("lungs_renewable");
+		lungsRenewable = ser.readInt("lungs_renewable");
+		poisoning = ser.readBool("poisoning", "no poisoning");
+		liver = ser.readInt("liver");
+		kidneys = ser.readInt("kidneys");
 		
 		super.deserialize(ser);
 		
@@ -117,19 +144,6 @@ public class AliensEngine extends Engine {
 			}
 		}		
 	}
-
-	int time;
-	
-	static final int SAFE = 0;
-	static final int GASP = 1;
-	static final int RESP = 2;
-	static final int MASK = 3;
-	int air;
-	
-	int lungs;
-	int lungs_renewable;
-		
-	boolean alive;
 	
 	void die() {
 		die("Я умер{/ла}");
@@ -139,14 +153,14 @@ public class AliensEngine extends Engine {
 		if (alive) {
 			add_notification(msg);
 			important();
+			alive = false;
 		}
-		alive = false;
 	}
 		
-	public String get_debug_info() {
+	public String getDebugInfo() {
 		String s = "";
 		
-		s += "lungs("+lungs+","+lungs_renewable+"); ";
+		s += "lungs("+lungs+","+lungsRenewable+"); ";
 		
 		s += "[";
 		for (int i = 0; i < queue.size(); i++) {
@@ -160,45 +174,115 @@ public class AliensEngine extends Engine {
 		
 	}
 	
-	protected String get_status() {
+	void addLungStatus() {
+		int x = lungs;
+		if (poisoning)
+			x -= 25;
+		// TODO: phrasing, effects
+		if (x < 0)
+			status += ic("у меня жесточайший кровавый кашель, Б3 в груди, частое дыхание; ");
+		else if (x < 25)
+			status += ic("боль в груди Б???, кашель с кровью, С3; ");
+		else if (x < 50)
+			status += ic("у меня одышка, С2; ");
+		else if (x < 75)
+			status += ic("у меня сухой кашель, С1; ");
+		else if (x < 100)
+			status += ic("мне тяжело дышать; ");		
+	}
+	
+	void addLiverStatus() {
+		int s = 0;
+		if (liver < 100)
+			s = 3;
+		else if (liver < 200)
+			s = 2;
+		else if (liver < 300)
+			s = 1;
+		if (poisoning)
+			s++;
+		
+		switch (s) {
+		case 0:
+			break;
+		case 1:
+			status += "боль в правом подреберье(?!) Б1, С1; ";
+			break;
+		case 2:
+			status += ic("Б2, меня постоянно тошнит, С1; ");
+			break;
+		case 3:
+		case 4:
+			status += ic("Б3, меня рвёт, С1; ");
+			break;
+		}
+		if (liver < 0)
+			die("Моя печень превратилась в говно и я сдох{/ла}");
+	}
+	
+	private void addKidneyStatus() {
+		int s = 0;
+		if (kidneys < 100)
+			s = 3;
+		else if (kidneys < 300)
+			s = 2;
+		else if (kidneys < 500)
+			s = 3;
+		if (poisoning)
+			s++;
+		
+		switch (s) {
+		case 0:
+			break;
+		case 1:
+			status += "я хочу пить; ";
+			break;
+		case 2:
+			status += ic("я хочу пить; болит голова Б???; ");
+			break;
+		case 3:
+			status += ic("Б3, боль в пояснице, С3; ");
+		}
+		
+		if (kidneys < 0)
+			die("Мои почки превратилась в говно и я сдох{/ла}");		
+	}
+	
+	String status;
+	protected String getStatus() {
+				
+		status = "";
+		String[] ss = collect_attrs("status");
+		for (int i = 0; i < ss.length; i++) {
+			status += ss[i] + "; ";
+		}
+		
+		addLungStatus();
+		addLiverStatus();
+		addKidneyStatus();
+		
+		if (air == SAFE)
+			status += "дышу чистым воздухом; ";
+		else if (air == GASP)
+			status += "дышу нефильтрованным воздухом; ";
+		else if (air == RESP)
+			status += "дышу через респиратор; ";
+		else if (air == MASK)
+			status += "дышу через полную маску; ";
+				
+		if (status.equals(""))
+			status = "жалоб нет";
 		
 		if (!alive)
 			return "Я МЕРТВ{/А}";
-		
-		String result = "";
-		String[] ss = collect_attrs("status");
-		for (int i = 0; i < ss.length; i++) {
-			result += ss[i] + "; ";
-		}
-		
-		if (lungs < 25)
-			result += ic("боль в груди, кашель с кровью; ");
-		else if (lungs < 50)
-			result += ic("постоянный сильный кашель, одышка, слабость; ");
-		else if (lungs < 75)
-			result += ic("сухой кашель, давит грудь; ");
-		else if (lungs < 100)
-			result += ic("хрипы, затруднённое дыхание; ");
-		
-		if (air == GASP)
-			result += "дышу нефильтрованным воздухом; ";
-		else if (air == RESP)
-			result += "дышу через респиратор; ";
-		else if (air == MASK)
-			result += "дышу через полную маску; ";
-				
-		if (result.equals(""))
-			result = "жалоб нет";
-		return result;
+
+		return status;
 	}
 	
-	protected void idle() {
-		time++;
-		
-		/*
+	private void lungsIdle() {
 		int dmg = 0;
 		if (air == SAFE)
-			lungs_renewable++;
+			lungsRenewable++;
 		else if (air == GASP)
 			dmg = 2;
 		else if (air == RESP)
@@ -209,21 +293,35 @@ public class AliensEngine extends Engine {
 		if (has_process("Antialvin"))
 			dmg = dmg*(time/2%2);
 		
-		if (lungs_renewable > 120)
-			lungs_renewable = 120;
+		if (lungsRenewable > 120)
+			lungsRenewable = 120;
 		
-		lungs_renewable -= dmg;
-		if (lungs_renewable < 0) {
-			lungs += lungs_renewable;
-			lungs_renewable = 0;
+		lungsRenewable -= dmg;
+		if (lungsRenewable < 0) {
+			lungs += lungsRenewable;
+			lungsRenewable = 0;
 		}
+		
+		if (poisoning)
+			lungs--;
 				
 		if (lungs > 120)
 			lungs = 120;
 		
 		if (lungs < 0)
-			die("Мои лёгкие превратились в говно и я задохнул{ся/ась}");*/
+			die("Мои лёгкие превратились в говно и я задохнул{ся/ась}");
+	}
+	
+	
+	protected void idle() {
+		time++;
 		
+		lungsIdle();
+		
+		if (poisoning) {
+			liver -= 10;
+			kidneys -= 1;
+		}
 	}
 	
 

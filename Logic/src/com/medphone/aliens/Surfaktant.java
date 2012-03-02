@@ -1,10 +1,10 @@
 package com.medphone.aliens;
 
-class Surfactant extends AliensProcess {
+class Surfaktant extends AliensProcess {
 
 	public
 	String get_name() {
-		return "Surfactant";
+		return "Surfaktant";
 	}
 
 	public

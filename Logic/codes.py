@@ -1,5 +1,6 @@
 reusable = [
     "Reset",
+    "DebugProcess",
 
     "Cross",
     "Safe",
@@ -7,8 +8,8 @@ reusable = [
     "Resp",
     "Mask",
 
-    "YellowDemo",
-    "BlueDemo",
+    "Yellow",
+    "Blue",
 
     "LeftArmDemo",
     "RightArmDemo",
@@ -21,11 +22,14 @@ unique = [
     #"Antialvin",
     #"Travian",
     "Sambuca",
+
+    "Surfaktant",
+    "AntiAlvine",
+    "PlasmaToxone",
 ]
 
 """
     "AbdominalSurgery",
-    "AntiAlvine",
     "BenzylAlienat",
     "CardCodes.!py",
     "Citosolute",
@@ -55,14 +59,12 @@ unique = [
     "MethMorthine",
     "MonoFloxacyne",
     "Perftoran",
-    "PlasmaToxone",
     "PlasmoDialite",
     "PolyPiroCetam",
     "RemovalSurgery",
     "Requre",
     "Sambuca",
     "StreptonideTonine",
-    "Surfaktant",
     "Urcaine",
     "UrcaineLeftArm",
     "UrcaineLeftLeg",

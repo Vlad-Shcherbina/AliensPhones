@@ -1,10 +1,10 @@
 package com.medphone.aliens;
 
-class Antialvin extends AliensProcess {
+class AntiAlvine extends AliensProcess {
 
 	public
 	String get_name() {
-		return "Antialvin";
+		return "AntiAlvine";
 	}
 
 	public void event() {

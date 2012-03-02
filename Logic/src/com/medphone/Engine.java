@@ -118,7 +118,7 @@ public abstract class Engine {
 		return ss;
 	}
 	
-	protected abstract String get_status();
+	protected abstract String getStatus();
 	protected abstract void idle();
 	
 	public TickResult tick() {
@@ -139,7 +139,7 @@ public abstract class Engine {
 		for (int i = 0; i < queue.size(); i++)
 			((Event)queue.elementAt(i)).t--;
 		
-		result.status = get_status();
+		result.status = getStatus();
 		
 		TickResult res = result;
 		

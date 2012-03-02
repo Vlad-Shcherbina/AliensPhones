@@ -1,6 +1,7 @@
 
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 import com.medphone.Engine;
@@ -124,6 +125,7 @@ public final class Main {
 				out.println("    wait <time in minutes> - wait N minutes, but stop when something interesting happens");
 				out.println("    sleep <time in minutes> - wait all the period no matter what would happen");
 				out.println("    <phoneword> - well, enter phoneword");
+				out.println("    ser - dump internal state and test serialization/deserialization");
 				continue;
 			}
 			
@@ -176,8 +178,14 @@ public final class Main {
 				Serializer ser = new Serializer();
 				engine.serialize(ser);
 				ser.print();
+				byte[] b = ser.getBytes();
 				engine.reset();
 				engine.deserialize(ser);
+				
+				ser = new Serializer();
+				engine.serialize(ser);
+				if (!Arrays.equals(b, ser.getBytes()))
+					out.println("*** SERIALIZATION/DESERIALIZATION PROBLEM");
 				continue;
 			}
 			
