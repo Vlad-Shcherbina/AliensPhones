@@ -1,3 +1,5 @@
+from codes import reusable, unique
+
 def phoneword(s):
     t = 'abc,def,ghi,jkl,mno,pqrs,tuv,wxyz'.split(',')
     result = ''
@@ -12,34 +14,9 @@ def phoneword(s):
         
 codes_dir = 'codes/'
 
-reusable = [
-    "Reset",
-
-    "Cross",
-    "Safe",
-    "Gasp",
-    "Resp",
-    "Mask",
-
-    "YellowDemo",
-    "BlueDemo",
-
-    "LeftArmDemo",
-    "RightArmDemo",
-    "LeftLegDemo",
-    "RightLegDemo",
-    "TorsoDemo",
-]
-unique = [
-    #"SampleProcess",
-    #"Surfactant",
-    #"Antialvin",
-    #"Travian",
-    "Sambuca",
-]
-
 result = []
-other_codes = []
+used_codes = set()
+used_prefixes = set()
 for name in reusable+unique:
     print name
     result.append('\t\t"{}", new Boolean({}), '.format(name, str(name in reusable).lower()))
@@ -47,7 +24,8 @@ for name in reusable+unique:
     file_name = name
     if name in reusable:
         file_name = 'reusable/'+file_name
-    file_name = 'codes/'+file_name
+    #file_name = 'codes/'+file_name
+    file_name = '../../Cards/codes/'+file_name
     if file_name.endswith('Demo'):
         file_name = file_name[:-4]
 
@@ -55,11 +33,14 @@ for name in reusable+unique:
     for code in codes:
         code = code.strip()
         code = phoneword(code)
+
         assert not code.startswith('0'), code
-        for c in other_codes:
-            assert not code.startswith(c), (code, c)
-            assert not c.startswith(code), (code, c)
-        other_codes.append(code)
+        assert code not in used_prefixes, code
+        for i in range(1, len(code)+1):
+            assert code[:i] not in used_codes, code[:i]+'...'
+            used_prefixes.add(code[:i])
+        used_codes.add(code)
+
         result.append('new Integer({}), '.format(code))
     result.append('\n')
 
