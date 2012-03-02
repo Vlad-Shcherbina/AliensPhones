@@ -213,7 +213,9 @@ public class Main extends MIDlet implements CommandListener {
 		a.setCommandListener(this);
 		a.addCommand(ok);
 		
-		display.setCurrent(a);
+		display.setCurrent(a, mainScreen); 
+		// mainScreen here is necessary - otherwise there is no
+		// sound on nokias on repeated notifications
 		a.getType().playSound(display);
 	}
 	
