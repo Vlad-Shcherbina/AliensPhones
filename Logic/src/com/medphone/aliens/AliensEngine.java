@@ -1,6 +1,7 @@
 package com.medphone.aliens;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 import com.medphone.Engine;
 import com.medphone.Process;
@@ -12,7 +13,7 @@ public class AliensEngine extends Engine {
 
 	Hashtable used_codes;
 	Hashtable index_by_code = null;
-
+	
 	public void initialize() {
 		index_by_code = new Hashtable();
 		Object[] t = AliensTables.codes;
@@ -312,10 +313,12 @@ public class AliensEngine extends Engine {
 	}
 	
 	
-	String status;
+	//String status;
+	Vector status;
 	
 	void addStatus(String s) {
-		status += s + "; ";
+		//status += s + "; ";
+		status.addElement(s);
 	}
 	
 	int weakness;
@@ -329,7 +332,7 @@ public class AliensEngine extends Engine {
 
 	protected String getStatus() {
 
-		status = "";
+		status = new Vector();
 		weakness = 0;
 		boolean new_conscious = true;
 		
@@ -360,19 +363,22 @@ public class AliensEngine extends Engine {
 		else if (air == MASK)
 			addStatus("дышу через полную маску");
 
-		if (status.equals(""))
-			status = "жалоб нет";
+		if (status.size() == 0) {
+			addStatus("жалоб нет");
+		}
 
 
-		if (conscious && !new_conscious)
-			addNotification("Я потерял сознание.");
-		else if (!conscious && new_conscious)
-			addNotification("Я пришел в себя.");
+		if (alive) {
+			if (conscious && !new_conscious)
+				addNotification("Я потерял{/а} сознание.");
+			if (!conscious && new_conscious)
+				addNotification("Я приш{ел/ла} в себя.");
+		}
 		
-		else if (!conscious && !new_conscious) {
+		if (!conscious && !new_conscious) {
 			if (result.notifications.size() > 0) {
 				result.notifications.clear();
-				addNotification("Я ничего не чувствую.");
+				addNotification("Я ничего не почувствовал{/а}.");
 			}
 			result.importance_flag = false;
 		}
@@ -383,11 +389,22 @@ public class AliensEngine extends Engine {
 			return "Я МЕРТВ{/А}";
 		
 		if (!conscious) {
-			return "я без сознания";
-			// TODO: only mask perceptions, not actual symptoms like blood or heat
+			for (int i = 0; i < status.size(); i++) {
+				String s = (String)status.elementAt(i);
+				if (!s.startsWith("* "))
+					status.removeElementAt(i--);
+			}
+			status.insertElementAt("я без сознания", 0);
 		}
 
-		return status;
+		String result = "";
+		for (int i = 0; i < status.size(); i++) {
+			String s = (String)status.elementAt(i);
+			if (s.startsWith("* "))
+				s = s.substring(2);
+			result += s + "; ";
+		}
+		return result;
 	}
 
 	private void lungsIdle() {
@@ -447,7 +464,8 @@ public class AliensEngine extends Engine {
 		ic_hash = 0;
 		TickResult res = super.tick();
 		if (prev_ic_hash != ic_hash)
-			res.importance_flag = true;
+			if (conscious)
+				res.importance_flag = true;
 
 		return res;
 	}
