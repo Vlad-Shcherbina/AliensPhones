@@ -1,4 +1,6 @@
-package com.medphone.aliens;
+package com.medphone.aliens.drugs;
+
+import com.medphone.aliens.AliensProcess;
 
 public class PlasmaToxone extends AliensProcess {
 

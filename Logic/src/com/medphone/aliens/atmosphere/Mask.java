@@ -1,4 +1,6 @@
-package com.medphone.aliens;
+package com.medphone.aliens.atmosphere;
+
+import com.medphone.aliens.AliensProcess;
 
 public class Mask extends AliensProcess {
 

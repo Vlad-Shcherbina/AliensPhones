@@ -1,6 +1,8 @@
-package com.medphone.aliens;
+package com.medphone.aliens.atmosphere;
 
-class Safe extends AliensProcess {
+import com.medphone.aliens.AliensProcess;
+
+public class Safe extends AliensProcess {
 
 	public String getName() {
 		return "Safe";

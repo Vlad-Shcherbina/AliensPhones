@@ -5,6 +5,8 @@ import java.util.Hashtable;
 import com.medphone.Engine;
 import com.medphone.Process;
 import com.medphone.Serializer;
+import com.medphone.aliens.drugs.*;
+
 
 public class AliensEngine extends Engine {
 
@@ -54,16 +56,16 @@ public class AliensEngine extends Engine {
 
 	int time;
 
-	static final int SAFE = 0;
-	static final int GASP = 1;
-	static final int RESP = 2;
-	static final int MASK = 3;
-	int air;
+	public static final int SAFE = 0;
+	public static final int GASP = 1;
+	public static final int RESP = 2;
+	public static final int MASK = 3;
+	public int air;
 
-	int lungs;
-	int lungsRenewable;
+	public int lungs;
+	public int lungsRenewable;
 
-	boolean poisoning;
+	public boolean poisoning;
 
 	int liver;
 	int kidneys;
@@ -125,7 +127,7 @@ public class AliensEngine extends Engine {
 		used_codes = ser.readDict();
 	}
 
-	boolean hasProcess(String name) {
+	public boolean hasProcess(String name) {
 		for (int i = queue.size() - 1; i >= 0; i--) {
 			Event e = (Event) queue.elementAt(i);
 			if (e.process.getName().equals(name))
@@ -134,7 +136,7 @@ public class AliensEngine extends Engine {
 		return false;
 	}
 
-	void cancelProcess(String name) {
+	public void cancelProcess(String name) {
 		for (int i = 0; i < queue.size(); i++) {
 			Event e = (Event) queue.elementAt(i);
 			if (e.process.getName().equals(name)) {
@@ -178,18 +180,26 @@ public class AliensEngine extends Engine {
 		int x = lungs;
 		if (poisoning)
 			x -= 25;
-		// TODO: dichloflu effecy
-		// TODO: phrasing, effects
-		if (x < 0)
-			status += ic("у меня жесточайший кровавый кашель, Б3 в груди, частое дыхание; ");
-		else if (x < 25)
-			status += ic("боль в груди Б???, кашель с кровью, С3; ");
-		else if (x < 50)
-			status += ic("у меня одышка, С2; ");
-		else if (x < 75)
-			status += ic("у меня сухой кашель, С1; ");
+		// TODO: dichloflu effects
+		// TODO: phrasing, pain
+		if (x < 0) {
+			addStatus(ic("у меня жесточайший кровавый кашель, Б3 в груди, частое дыхание"));
+			setWeakness(3);
+		}
+		else if (x < 25) {
+			addStatus(ic("боль в груди Б???, кашель с кровью"));
+			setWeakness(3);
+		}
+		else if (x < 50) {
+			addStatus(ic("у меня одышка"));
+			setWeakness(2);
+		}
+		else if (x < 75) {
+			addStatus(ic("у меня сухой кашель"));
+			setWeakness(1);
+		}
 		else if (x < 100)
-			status += ic("мне тяжело дышать; ");
+			addStatus(ic("мне тяжело дышать"));
 	}
 
 	void addLiverStatus() {
@@ -207,14 +217,17 @@ public class AliensEngine extends Engine {
 		case 0:
 			break;
 		case 1:
-			status += "боль в правом подреберье(?!) Б1, С1; ";
+			addStatus("боль в правом подреберье(?!) Б1");
+			setWeakness(1);
 			break;
 		case 2:
-			status += ic("Б2, меня постоянно тошнит, С1; ");
+			addStatus(ic("Б2, меня постоянно тошнит"));
+			setWeakness(1);
 			break;
 		case 3:
 		case 4:
-			status += ic("Б3, меня рвёт, С1; ");
+			addStatus(ic("Б3, меня рвёт"));
+			setWeakness(1);
 			break;
 		}
 		if (liver < 0)
@@ -236,41 +249,94 @@ public class AliensEngine extends Engine {
 		case 0:
 			break;
 		case 1:
-			status += "я хочу пить; ";
+			addStatus("я хочу пить");
 			break;
 		case 2:
-			status += ic("я хочу пить; болит голова Б???; ");
+			addStatus(ic("я хочу пить; болит голова Б???"));
 			break;
 		case 3:
-			status += ic("Б3, боль в пояснице, С3; ");
+			addStatus(ic("Б3, боль в пояснице"));
+			setWeakness(3);
+			break;
+		default:
+			break;
 		}
 
 		if (kidneys < 0)
 			die("Мои почки превратилась в говно и я сдох{/ла}");
 	}
+	
+	int weakness;
+	
+	void setWeakness(int w) {
+		if (w > weakness)
+			weakness = w;
+	}
 
+	void addWeaknessStatus() {
+		String[] ww = collectAttrs("weakness");
+		for (int i = 0; i < ww.length; i++) {
+			try {
+				int w = Integer.parseInt(ww[i]);
+				setWeakness(w);
+			}
+			catch (NumberFormatException e) {
+				System.out.println("error parsing weakness");
+			}
+		}
+		// TODO: modify by echinospore, friz, methanol-cyanide
+		// TODO: mobility restrictions
+		switch (weakness) {
+		case 0:
+			break;
+		case 1:
+			addStatus("я немного устал{/а}");
+			break;
+		case 2:
+			addStatus("я чувствую слабость");
+			break;
+		case 3:
+			addStatus(ic("я cущественно ослаб{/ла}"));
+			break;
+		case 4:
+			addStatus(ic("я дико ослаб{/ла}"));
+			break;
+		default:
+			break;
+		}
+	}
+	
 	String status;
+	
+	void addStatus(String s) {
+		status += s + "; ";
+	}
 
 	protected String getStatus() {
 
 		status = "";
+		weakness = 0;
+		
 		String[] ss = collectAttrs("status");
 		for (int i = 0; i < ss.length; i++) {
-			status += ss[i] + "; ";
+			addStatus(ss[i]);
 		}
 
 		addLungStatus();
 		addLiverStatus();
 		addKidneyStatus();
+		
+		addWeaknessStatus();
+		
 
 		if (air == SAFE)
-			status += "дышу чистым воздухом; ";
+			addStatus("дышу чистым воздухом");
 		else if (air == GASP)
-			status += "дышу нефильтрованным воздухом; ";
+			addStatus("дышу нефильтрованным воздухом");
 		else if (air == RESP)
-			status += "дышу через респиратор; ";
+			addStatus("дышу через респиратор");
 		else if (air == MASK)
-			status += "дышу через полную маску; ";
+			addStatus("дышу через полную маску");
 
 		if (status.equals(""))
 			status = "жалоб нет";

@@ -1,4 +1,7 @@
-package com.medphone.aliens;
+package com.medphone.aliens.drugs;
+
+import com.medphone.aliens.AliensProcess;
+import com.medphone.aliens.LeftArmDemo;
 
 public class Sambuca extends AliensProcess {
 
@@ -30,6 +33,7 @@ public class Sambuca extends AliensProcess {
 		case 2:
 			addNotification("Надо бы догнаться!");
 			setAttr("status", "я ощущаю лёгкую тупость и упадок");
+			setAttr("weakness", "1");
 			stage = 3;
 			schedule(10+a().rand(4));
 			break;

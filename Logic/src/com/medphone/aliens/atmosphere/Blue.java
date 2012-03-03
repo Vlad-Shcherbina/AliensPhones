@@ -1,4 +1,4 @@
-package com.medphone.aliens;
+package com.medphone.aliens.atmosphere;
 
 public class Blue extends Yellow {
 	

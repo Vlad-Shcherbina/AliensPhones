@@ -2,8 +2,8 @@ package com.medphone.aliens;
 import com.medphone.Process;
 
 
-abstract class AliensProcess extends Process {
-	AliensEngine a() {
+public abstract class AliensProcess extends Process {
+	protected AliensEngine a() {
 		return (AliensEngine)engine;
 	}
 }

@@ -52,6 +52,8 @@ template = """
 package com.medphone.aliens;
 
 import com.medphone.Process;
+import com.medphone.aliens.drugs.*;
+import com.medphone.aliens.atmosphere.*;
 
 public class AliensTables {
 	static final Object[] codes = {

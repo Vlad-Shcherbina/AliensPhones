@@ -1,6 +1,8 @@
-package com.medphone.aliens;
+package com.medphone.aliens.drugs;
 
-class Surfaktant extends AliensProcess {
+import com.medphone.aliens.AliensProcess;
+
+public class Surfaktant extends AliensProcess {
 
 	public
 	String getName() {

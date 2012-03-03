@@ -1,6 +1,8 @@
-package com.medphone.aliens;
+package com.medphone.aliens.drugs;
 
-class AntiAlvine extends AliensProcess {
+import com.medphone.aliens.AliensProcess;
+
+public class AntiAlvine extends AliensProcess {
 
 	public
 	String getName() {
