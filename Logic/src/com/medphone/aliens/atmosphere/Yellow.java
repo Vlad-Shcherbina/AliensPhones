@@ -22,10 +22,14 @@ public class Yellow extends AliensProcess {
 		else if (a().air == a().MASK)
 			dmg /= 9;
 		
-		if (dmg > 100)
-			addNotification("Я аццки закашлял{ся/ась} (TODO: Н3 5 мин)");
+		if (dmg > 100) {
+			addNotification("Я адски закашлял{ся/ась}");
+			setAttr("unconscious", "zzz");
+			stage = 1;
+			schedule(4);
+		}
 		else if (dmg > 10)
-			addNotification("Я закашлял{ся/ась} (TODO: Н1 1 мин)");
+			addNotification("Я закашлял{ся/ась}, у меня закружилась голова.");
 		
 		a().lungsRenewable -= dmg;
 		if (a().lungs < 0) {
@@ -40,10 +44,21 @@ public class Yellow extends AliensProcess {
 	}
 
 	public void event() {
-		a().cancelProcess(new Yellow().getName());
-		a().cancelProcess(new Blue().getName());
-		addNotification(getMessage());
-		instantDamage(getDamage());
+		switch (stage) {
+		case 0:
+			a().cancelProcess(new Yellow().getName());
+			a().cancelProcess(new Blue().getName());
+			addNotification(getMessage());
+			instantDamage(getDamage());
+			break;
+		case 1:
+			delAttr("unconscious");
+			setAttr("weakness", "2");
+			
+			stage = 2;
+			schedule(2);
+			break;
+		}
 	}
 
 }

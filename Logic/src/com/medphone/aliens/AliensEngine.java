@@ -56,6 +56,9 @@ public class AliensEngine extends Engine {
 
 	int time;
 
+	boolean alive;
+	boolean conscious;
+
 	public static final int SAFE = 0;
 	public static final int GASP = 1;
 	public static final int RESP = 2;
@@ -70,7 +73,6 @@ public class AliensEngine extends Engine {
 	int liver;
 	int kidneys;
 
-	boolean alive;
 
 	public void reset() {
 		super.reset();
@@ -80,6 +82,7 @@ public class AliensEngine extends Engine {
 		time = 0;
 
 		alive = true;
+		conscious = true;
 
 		air = SAFE;
 		lungs = 120;
@@ -95,7 +98,10 @@ public class AliensEngine extends Engine {
 		// ser.writeString("zzz whatever");
 
 		ser.writeInt("time", time);
+		
 		ser.writeBool(alive, "alive", "dead");
+		ser.writeBool(conscious, "conscious", "unconscious");
+		
 		ser.writeInt("air", air);
 		ser.writeInt("lungs", lungs);
 		ser.writeInt("lungs_renewable", lungsRenewable);
@@ -114,7 +120,10 @@ public class AliensEngine extends Engine {
 		// throw new RuntimeException("zzz whatever");
 
 		time = ser.readInt("time");
+		
 		alive = ser.readBool("alive", "dead");
+		conscious = ser.readBool("conscious", "unconscious");
+		
 		air = ser.readInt("air");
 		lungs = ser.readInt("lungs");
 		lungsRenewable = ser.readInt("lungs_renewable");
@@ -266,13 +275,6 @@ public class AliensEngine extends Engine {
 			die("Мои почки превратилась в говно и я сдох{/ла}");
 	}
 	
-	int weakness;
-	
-	void setWeakness(int w) {
-		if (w > weakness)
-			weakness = w;
-	}
-
 	void addWeaknessStatus() {
 		String[] ww = collectAttrs("weakness");
 		for (int i = 0; i < ww.length; i++) {
@@ -285,7 +287,6 @@ public class AliensEngine extends Engine {
 			}
 		}
 		// TODO: modify by echinospore, friz, methanol-cyanide
-		// TODO: mobility restrictions
 		switch (weakness) {
 		case 0:
 			break;
@@ -293,34 +294,55 @@ public class AliensEngine extends Engine {
 			addStatus("я немного устал{/а}");
 			break;
 		case 2:
-			addStatus("я чувствую слабость");
+			addStatus("я слаб{/а}");
+			addStatus("без опоры подкашиваются ноги");
 			break;
 		case 3:
 			addStatus(ic("я cущественно ослаб{/ла}"));
+			addStatus("не могу встать даже на четвереньки");
 			break;
 		case 4:
+		case 5:
 			addStatus(ic("я дико ослаб{/ла}"));
+			addStatus("не могу даже пальцем пошевелить");
 			break;
 		default:
 			break;
 		}
 	}
 	
+	
 	String status;
 	
 	void addStatus(String s) {
 		status += s + "; ";
 	}
+	
+	int weakness;
+	
+	void setWeakness(int w) {
+		if (w > weakness)
+			weakness = w;
+	}
+
+	
 
 	protected String getStatus() {
 
 		status = "";
 		weakness = 0;
+		boolean new_conscious = true;
 		
 		String[] ss = collectAttrs("status");
 		for (int i = 0; i < ss.length; i++) {
 			addStatus(ss[i]);
 		}
+		
+		String[] uu = collectAttrs("unconscious");
+		for (int i = 0; i < uu.length; i++) {
+			new_conscious = false;
+		}
+		
 
 		addLungStatus();
 		addLiverStatus();
@@ -341,8 +363,29 @@ public class AliensEngine extends Engine {
 		if (status.equals(""))
 			status = "жалоб нет";
 
+
+		if (conscious && !new_conscious)
+			addNotification("Я потерял сознание.");
+		else if (!conscious && new_conscious)
+			addNotification("Я пришел в себя.");
+		
+		else if (!conscious && !new_conscious) {
+			if (result.notifications.size() > 0) {
+				result.notifications.clear();
+				addNotification("Я ничего не чувствую.");
+			}
+			result.importance_flag = false;
+		}
+		
+		conscious = new_conscious;
+
 		if (!alive)
 			return "Я МЕРТВ{/А}";
+		
+		if (!conscious) {
+			return "я без сознания";
+			// TODO: only mask perceptions, not actual symptoms like blood or heat
+		}
 
 		return status;
 	}

@@ -93,7 +93,7 @@ public abstract class Engine {
 		public boolean importance_flag;
 	}
 	
-	TickResult result;
+	protected TickResult result;
 	
 	public void addNotification(String s) {
 		result.notifications.addElement(s);
