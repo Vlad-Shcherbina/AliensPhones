@@ -2,15 +2,15 @@ package com.medphone.aliens;
 
 class Resp extends AliensProcess {
 
-	public String get_name() {
+	public String getName() {
 		return "Resp";
 	}
 
 	public void event() {
 		if (a().air != a().RESP)
-			add_notification("Я надел{/а} респиратор и выш{ел/ла} в коридоры.");
+			addNotification("Я надел{/а} респиратор и выш{ел/ла} в коридоры.");
 		else
-			add_notification("Я уже в респираторе.");
+			addNotification("Я уже в респираторе.");
 		a().air = a().RESP;
 	}
 

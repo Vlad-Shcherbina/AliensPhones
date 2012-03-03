@@ -29,7 +29,7 @@ public final class Main {
 
 	static void processCode(int code) {
 	
-		int code_status = engine.code_status(code);
+		int code_status = engine.codeStatus(code);
 		if (code_status == engine.INVALID_CODE) {
 			out.println("invalid code");
 			return;
@@ -40,7 +40,7 @@ public final class Main {
 		}
 		
 		//out.println("Receiving code "+code);
-		engine.receive_code(code);
+		engine.receiveCode(code);
 		later();
 		time_passed = -1; // because we are losing one minute on every code
 		tick();

@@ -2,12 +2,12 @@ package com.medphone.aliens;
 
 public class RightLegDemo extends AliensProcess {
 
-	public String get_name() {
+	public String getName() {
 		return "RightLegDemo";
 	}
 
 	public void event() {
-		add_notification("Пуля просвистела в дюйме от моей правой ноги.");
+		addNotification("Пуля просвистела в дюйме от моей правой ноги.");
 	}
 
 }

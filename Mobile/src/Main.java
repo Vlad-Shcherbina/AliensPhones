@@ -167,7 +167,7 @@ public class Main extends MIDlet implements CommandListener {
 			else
 			try {
 				int c = Integer.parseInt(code);
-				int code_status = engine.code_status(c);
+				int code_status = engine.codeStatus(c);
 				if (code_status == engine.USED_CODE) {
 					Alert a = new Alert(code, "Код уже использовался", null, AlertType.ERROR);
 					a.setTimeout(1000);
@@ -177,7 +177,7 @@ public class Main extends MIDlet implements CommandListener {
 				}
 				else if (code_status == engine.VALID_CODE) {
 					code = "";
-					engine.receive_code(c);
+					engine.receiveCode(c);
 					cancelTimerTask();
 					tick();
 				}

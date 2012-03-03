@@ -1,27 +1,27 @@
 package com.medphone.aliens;
 
-class Travian extends AliensProcess {
+public class Travian extends AliensProcess {
 
-	public String get_name() {
+	public String getName() {
 		return "Travian";
 	}
 
 	public void event() {
 		switch (stage) {
 		case 0:
-			a().cancel_process(get_name());
-			add_notification("Я закатал{/а} лепёшку травиана под язык.");
-			set_attr("status", "я изредка пошевеливаю пальцами, как будто играю на пианино");
+			a().cancelProcess(getName());
+			addNotification("Я закатал{/а} лепёшку травиана под язык.");
+			setAttr("status", "я изредка пошевеливаю пальцами, как будто играю на пианино");
 			stage = 1;
 			schedule(4);
 			break;
 		case 1:
-			set_attr("status", "тени сгущаются");
+			setAttr("status", "тени сгущаются");
 			stage = 2;
 			schedule(4);
 			break;
 		case 2:
-			set_attr("status", 
+			setAttr("status", 
 					"вокруг бродят какие-то странные глюки; " +
 					"длинный текст чтобы удостовериться что там скролл " +
 					"работает корректно, что вне зависимости от состояния " +
@@ -48,9 +48,9 @@ class Travian extends AliensProcess {
 			break;
 		case 3:
 			stage = 4;
-			add_notification("Что-то я подумал{/а} что можно было бы зажрать " +
+			addNotification("Что-то я подумал{/а} что можно было бы зажрать " +
 					"травиан ещё раз как-нибудь при случае.");
-			set_attr("status", "хочу травиан");
+			setAttr("status", "хочу травиан");
 			stage = 4;
 			schedule(4);
 			break;

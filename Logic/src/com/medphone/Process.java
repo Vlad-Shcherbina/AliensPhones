@@ -4,7 +4,7 @@ import java.util.Hashtable;
 
 
 public abstract class Process {
-	abstract public String get_name();
+	abstract public String getName();
 	
 	public int stage = 0;
 	protected Engine engine;
@@ -16,19 +16,19 @@ public abstract class Process {
 		engine.schedule(this, dt);
 	}
 	
-	protected void add_notification(String s) {
-		engine.add_notification(s);
+	protected void addNotification(String s) {
+		engine.addNotification(s);
 	}
 	
 	protected void important() {
 		engine.important();
 	}
 	
-	protected void set_attr(String key, String value) {
+	protected void setAttr(String key, String value) {
 		attrs.put(key, value);
 	}
 	
-	protected void del_attr(String key) {
+	protected void delAttr(String key) {
 		attrs.remove(key);
 	}
 }

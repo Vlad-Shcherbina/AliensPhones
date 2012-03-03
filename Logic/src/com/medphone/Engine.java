@@ -10,8 +10,8 @@ public abstract class Engine {
 	public static final int VALID_CODE = 2;
 	public static final int INVALID_CODE = 3;
 	
-	public abstract int code_status(int code);
-	public abstract void receive_code(int code);
+	public abstract int codeStatus(int code);
+	public abstract void receiveCode(int code);
 	
 	public abstract void initialize();
 
@@ -35,7 +35,7 @@ public abstract class Engine {
 		for (int i = 0; i < queue.size(); i++) {
 			Event e = (Event)queue.elementAt(i);
 			ser.writeInt("t", e.t);
-			ser.writeString(e.process.get_name());
+			ser.writeString(e.process.getName());
 			ser.writeInt("stage", e.process.stage);
 			ser.writeDict(e.process.attrs);
 		}
@@ -75,7 +75,7 @@ public abstract class Engine {
 		queue.addElement(q);
 	}
 
-	Event pop_event() {
+	Event popEvent() {
 		// in reverse order to ensure LIFO for simultaneous events
 		for (int i = queue.size()-1; i >= 0; i--) {
 			Event e = (Event)queue.elementAt(i);
@@ -95,7 +95,7 @@ public abstract class Engine {
 	
 	TickResult result;
 	
-	public void add_notification(String s) {
+	public void addNotification(String s) {
 		result.notifications.addElement(s);
 	}
 	
@@ -103,7 +103,7 @@ public abstract class Engine {
 		result.importance_flag = true;
 	}
 	
-	protected String[] collect_attrs(String key) {
+	protected String[] collectAttrs(String key) {
 		Vector result = new Vector();
 		for (int i = 0; i < queue.size(); i++) {
 			Event e = (Event)queue.elementAt(i);
@@ -128,7 +128,7 @@ public abstract class Engine {
 		result.importance_flag = false;
 		
 		while (true) {
-			Event e = pop_event();
+			Event e = popEvent();
 			if (e == null)
 				break;
 			e.process.event();
@@ -143,10 +143,10 @@ public abstract class Engine {
 		
 		TickResult res = result;
 		
-		res.status = fix_gender(res.status);
+		res.status = fixGender(res.status);
 		for (int i = 0; i < res.notifications.size(); i++)
 			res.notifications.setElementAt(
-					fix_gender((String)res.notifications.elementAt(i)),
+					fixGender((String)res.notifications.elementAt(i)),
 					i);
 		
 		result = null;
@@ -154,7 +154,7 @@ public abstract class Engine {
 	}
 	
 	public boolean male = true;
-	String fix_gender(String s) {
+	String fixGender(String s) {
 		String result = "";
 		int pos = 0;
 		int i;

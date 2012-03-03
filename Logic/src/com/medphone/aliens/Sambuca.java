@@ -2,34 +2,34 @@ package com.medphone.aliens;
 
 public class Sambuca extends AliensProcess {
 
-	public String get_name() {
+	public String getName() {
 		return "Sambuca";
 	}
 
 	public void event() {
 		switch (stage) {
 		case 0:
-			a().cancel_process(get_name());
-			add_notification("Я принял{/а} этот обжигающий напиток.");
+			a().cancelProcess(getName());
+			addNotification("Я принял{/а} этот обжигающий напиток.");
 			
-			if (a().has_process("LeftArmDemo")) {
-				add_notification("В общем-то, хрен с ним, с костюмом!");
-				a().cancel_process("LeftArmDemo");
+			if (a().hasProcess(new LeftArmDemo().getName())) {
+				addNotification("В общем-то, хрен с ним, с костюмом!");
+				a().cancelProcess(new LeftArmDemo().getName());
 			}
 			
-			set_attr("status", "я ощущаю эйфорию и подъём");
+			setAttr("status", "я ощущаю эйфорию и подъём");
 			schedule(6+a().rand(4));
 			stage = 1;
 			break;
 		case 1:
-			set_attr("status", "я готов говорить с кем угодно о чём угодно");
+			setAttr("status", "я готов говорить с кем угодно о чём угодно");
 			important();
 			schedule(8+a().rand(4));
 			stage = 2;
 			break;
 		case 2:
-			add_notification("Надо бы догнаться!");
-			set_attr("status", "я ощущаю лёгкую тупость и упадок");
+			addNotification("Надо бы догнаться!");
+			setAttr("status", "я ощущаю лёгкую тупость и упадок");
 			stage = 3;
 			schedule(10+a().rand(4));
 			break;

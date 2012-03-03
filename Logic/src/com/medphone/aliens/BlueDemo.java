@@ -2,12 +2,12 @@ package com.medphone.aliens;
 
 public class BlueDemo extends AliensProcess {
 
-	public String get_name() {
+	public String getName() {
 		return "BlueDemo";
 	}
 
 	public void event() {
-		add_notification(
+		addNotification(
 				"Я услышал{/а} аццкое шипение и почувствовал{/а} " +
 				"кислый привкус во рту.");
 	}

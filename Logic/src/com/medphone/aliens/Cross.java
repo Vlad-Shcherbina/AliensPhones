@@ -2,16 +2,16 @@ package com.medphone.aliens;
 
 class Cross extends AliensProcess {
 
-	public String get_name() {
+	public String getName() {
 		return "Cross";
 	}
 
 	public void event() {
 		a().male = !a().male;
 		if (a().male)
-			add_notification("Я мужчина.");
+			addNotification("Я мужчина.");
 		else
-			add_notification("Я женщина.");
+			addNotification("Я женщина.");
 	}
 	
 }

@@ -2,15 +2,15 @@ package com.medphone.aliens;
 
 public class Mask extends AliensProcess {
 
-	public String get_name() {
+	public String getName() {
 		return "Mask";
 	}
 
 	public void event() {
 		if (a().air != a().MASK)
-			add_notification("Я надел{/а} полную маску и выш{ел/ла} в коридоры.");
+			addNotification("Я надел{/а} полную маску и выш{ел/ла} в коридоры.");
 		else
-			add_notification("Я уже в полной маске.");
+			addNotification("Я уже в полной маске.");
 		a().air = a().MASK;		
 	}
 
