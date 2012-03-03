@@ -17,6 +17,7 @@ reusable = [
     "RightLegDemo",
     "TorsoDemo",
 ]
+
 unique = [
     #"Surfactant",
     #"Antialvin",
@@ -81,3 +82,17 @@ unique = [
     "WarfareenSalicylat",
 ]
 """
+
+
+def get_code_path(name):
+    file_name = name
+    if name in reusable:
+        file_name = 'reusable/'+file_name
+    file_name = '../../Cards/codes/'+file_name
+    if file_name.endswith('Demo'):
+        file_name = file_name[:-4]
+    return file_name
+
+
+def get_codes(name):
+    return [c.strip() for c in open(get_code_path(name)).readlines()]
