@@ -31,11 +31,15 @@ unique = [
     "EssenceCita",
     "PlasmoDialite",
 
+    "StreptonideTonine",
+    "MonoFloxacyne",
+    "Cyprostane",
+    "Klodil",
+    "Citosolute",
+    "DichloFlu",
 
     "***break***",
 
-    "Citosolute",
-    "Cyprostane",
     
     "AbdominalSurgery",
     "DichloFlu",
@@ -55,15 +59,12 @@ unique = [
     "FybrinogenLocalTorso",
     "GetAnalysis",
     "Healer",
-    "Klodil",
     "MetanolCyanide",
     "MethMorthine",
-    "MonoFloxacyne",
     "Perftoran",
     "PolyPiroCetam",
     "RemovalSurgery",
     "Requre",
-    "StreptonideTonine",
     "UrcaineLeftArm",
     "UrcaineLeftLeg",
     "UrcaineRightArm",

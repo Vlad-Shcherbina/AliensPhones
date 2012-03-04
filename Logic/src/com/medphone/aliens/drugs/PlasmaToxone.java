@@ -18,7 +18,9 @@ public class PlasmaToxone extends AliensProcess {
 			break;
 		case 1:
 			a().poisoning = false;
-			// TODO: cancel methmorthine, methanol-cyanide, monofloxacyne
+			a().cancelProcess(new MonoFloxacyne().getName());
+			a().cancelProcess(new Klodil().getName());
+			// TODO: cancel methmorthine, methanol-cyanide
 			break;
 		}
 

@@ -100,6 +100,11 @@ public class AliensEngine extends Engine {
 	public int kidneys;
 
 	int painTolerance;
+	
+	public boolean sepsis;
+	int sepsisHits;
+	
+	int prevMobility;
 
 	// //////////////////////
 
@@ -124,6 +129,11 @@ public class AliensEngine extends Engine {
 		kidneys = 600;
 
 		painTolerance = 10;
+		
+		sepsis = true;
+		sepsisHits = 120;
+		
+		prevMobility = 0;
 	}
 
 	public void serialize(Serializer ser) {
@@ -144,6 +154,9 @@ public class AliensEngine extends Engine {
 		ser.writeInt("liver", liver);
 		ser.writeInt("kidneys", kidneys);
 		ser.writeInt("painTolerance", painTolerance);
+		ser.writeBool(sepsis, "sepsis", "no sepsis");
+		ser.writeInt("sepsisHits", sepsisHits);
+		ser.writeInt("prevMobility", prevMobility);
 
 		super.serialize(ser);
 
@@ -169,6 +182,9 @@ public class AliensEngine extends Engine {
 		liver = ser.readInt("liver");
 		kidneys = ser.readInt("kidneys");
 		painTolerance = ser.readInt("painTolerance");
+		sepsis = ser.readBool("sepsis", "no sepsis");
+		sepsisHits = ser.readInt("sepsisHits");
+		prevMobility = ser.readInt("prevMobility");
 
 		super.deserialize(ser);
 
@@ -233,28 +249,73 @@ public class AliensEngine extends Engine {
 		return s;
 
 	}
+	
+	void addBloodStatus() {
+		// TODO: bleeding
+
+		int speed = 30; // per hour
+		// TODO: erpoitin speedup
+		
+		speed = speed*liver/600;
+		
+		blood += speed / 60;
+		if (rand(60) < speed%60)
+			blood += 1;
+		
+		if (blood < 0) {
+			die("Из меня вытекло слишком много крови и я умер{/ла}.");
+		}
+		else if (blood < 1000) {
+			setWeakness(4);
+		}
+		else if (blood < 1500) {
+			setWeakness(3);
+			addStatus("темнеет в глазах");
+		}
+		else if (blood < 2000) {
+			setWeakness(2);
+			addStatus("хочу пить");
+		}
+		else if (blood < 2500) {
+			setWeakness(1);
+		}
+	}
 
 	void addLungStatus() {
 		int x = lungs;
 		if (poisoning)
 			x -= 25;
-		// TODO: dichloflu effects
+		
+		String df = new DichloFlu().getName();
+		boolean maskCough = hasProcess(df, 2) || hasProcess(df, 3);
+		
 		if (x < 0) {
-			addStatus(ic("! у меня жесточайший кровавый кашель; частое дыхание"));
+			if (maskCough)
+				addStatus(ic("у меня лёгкий кашель"));
+			else
+				addStatus(ic("! у меня жесточайший кровавый кашель"));
+			addStatus("частое дыхание");
 			setWeakness(3);
 			setPain("Chest", 3);
 		} else if (x < 25) {
-			addStatus(ic("! кашель с кровью"));
+			if (maskCough)
+				addStatus("я слегка покашливаю");
+			else
+				addStatus(ic("! кашель с кровью"));
 			setWeakness(3);
 			setPain("Chest", 2);
 		} else if (x < 50) {
-			addStatus(ic("у меня одышка"));
+			if (!maskCough)
+				addStatus(ic("у меня одышка"));
 			setWeakness(2);
 		} else if (x < 75) {
-			addStatus(ic("у меня сухой кашель"));
+			if (!maskCough)
+				addStatus(ic("у меня сухой кашель"));
 			setWeakness(1);
-		} else if (x < 100)
-			addStatus(ic("мне тяжело дышать"));
+		} else if (x < 100) {
+			if (!maskCough)
+				addStatus(ic("мне тяжело дышать"));
+		}
 	}
 
 	void addLiverStatus() {
@@ -306,7 +367,7 @@ public class AliensEngine extends Engine {
 		else if (kidneys < 300)
 			s = 2;
 		else if (kidneys < 500)
-			s = 3;
+			s = 1;
 		if (poisoning)
 			s++;
 
@@ -344,6 +405,14 @@ public class AliensEngine extends Engine {
 			}
 		}
 		// TODO: modify by echinospore, friz, methanol-cyanide, dichloflu
+		
+		if (hasProcess(new DichloFlu().getName(), 2))
+			weakness--;
+		
+		int mobility = 0;
+		
+		if (weakness < 0)
+			weakness = 0;
 		switch (weakness) {
 		case 0:
 			break;
@@ -351,21 +420,35 @@ public class AliensEngine extends Engine {
 			addStatus("я немного слаб{/а}");
 			break;
 		case 2:
-			addStatus("! я слаб{/а}");
-			addStatus("! без опоры подкашиваются ноги");
+			addStatus(ic("! я слаб{/а}"));
+			mobility = 1;
 			break;
 		case 3:
 			addStatus(ic("! я очень слаб{/а}"));
-			addStatus("! не могу встать даже на четвереньки");
+			mobility = 2;
 			break;
 		case 4:
 		case 5:
 			addStatus(ic("! я дико ослаб{/ла}"));
-			addStatus("! не могу даже пальцем пошевелить");
+			mobility = 3;
 			break;
 		default:
 			break;
 		}
+		
+		if (mobility > 0) {
+			if (mobility > 3)
+				mobility = 3;
+			String[] mob = {
+					null,
+					"без опоры подкашиваются ноги",
+					"не могу встать даже на четвереньки",
+					"не могу даже пальцем пошевелить"};
+			addStatus("! "+mob[mobility]);
+			if (prevMobility < mobility)
+				addNotification(mob[mobility]);
+		}
+		prevMobility = mobility;
 	}
 
 	void addPainStatus() {
@@ -433,10 +516,47 @@ public class AliensEngine extends Engine {
 					}
 				}
 			} else if (max == 2)
-				if (time % 2 == 0) {
+				if (time % 3 == 0) {
 					important();
 				}
 		}
+	}
+	
+	void addSepsisStatus() {
+		// TODO: friz slowdown
+		if (sepsis)
+			sepsisHits -= 1+time%2; 
+		else
+			sepsisHits += 1+time%2;
+		
+		if (sepsisHits > 120)
+			sepsisHits = 120;
+		
+		boolean maskHeat = hasProcess(new DichloFlu().getName(), 2);
+		
+		if (sepsisHits < 0)
+			die("Моё сознание совсем помутилось, меня адски стошнило и я умер{/ла}.");
+		else if (sepsisHits < 30) {
+			setWeakness(3);
+			setPain("Everywhere", 2);
+			if (maskHeat)
+				addStatus("у меня слегка повышена температура");
+			else {
+				addStatus("* у меня сильный жар");
+				addStatus("(ic) я дрожу");
+			}
+		}
+		else if (sepsisHits < 60) {
+			setWeakness(2);
+			if (!maskHeat)
+				addStatus(ic("* у меня жар"));
+		}
+		else if (sepsisHits < 90) {
+			setWeakness(1);
+			if (!maskHeat)
+				addStatus("у меня повышенная температура");
+		}
+			
 	}
 
 	Vector status;
@@ -477,26 +597,30 @@ public class AliensEngine extends Engine {
 			new_conscious = false;
 		}
 
+		addBloodStatus();
 		addLungStatus();
 		addLiverStatus();
 		addKidneyStatus();
-
+		addSepsisStatus();
+		
 		addWeaknessStatus();
 
 		addPainStatus();
 
-		if (air == SAFE)
-			addStatus("дышу чистым воздухом");
-		else if (air == GASP)
-			addStatus("дышу нефильтрованным воздухом");
-		else if (air == RESP)
-			addStatus("дышу через респиратор");
-		else if (air == MASK)
-			addStatus("дышу через полную маску");
-
-		if (status.size() == 0) {
-			addStatus("жалоб нет");
+		if (status.size() < 5) {
+			if (air == SAFE)
+				addStatus("дышу чистым воздухом");
+			else if (air == GASP)
+				addStatus("дышу нефильтрованным воздухом");
+			else if (air == RESP)
+				addStatus("дышу через респиратор");
+			else if (air == MASK)
+				addStatus("дышу через полную маску");
 		}
+
+		/*if (status.size() == 0) {
+			addStatus("жалоб нет");
+		}*/
 
 		if (!alive && !conscious)
 			new_conscious = true; // you wake up before death to suffer
@@ -509,10 +633,6 @@ public class AliensEngine extends Engine {
 
 		Vector nots = result.notifications;
 		if (!conscious && !new_conscious) {
-			/*if (result.notifications.size() > 0) {
-				result.notifications = new Vector();
-				addNotification("Я ничего не почувствовал{/а}.");
-			}*/
 			
 			int n_maskable = 0;
 			for (int i = 0; i < nots.size(); i++) {
@@ -540,7 +660,7 @@ public class AliensEngine extends Engine {
 
 		if (!alive) {
 			queue = new Vector();
-			return "Я МЕРТВ{/А}; (Игрок, выключи телефон! Изображай труп а потом иди к мастерам)";
+			return "Я МЕРТВ{/А} (Игрок, выключи телефон! Изображай труп а потом иди к мастерам)";
 		}
 
 		if (!conscious) {
@@ -553,7 +673,7 @@ public class AliensEngine extends Engine {
 		}
 
 		// sort by priorities
-		String[] priorities = { "!!! ", "!! ", "* ", "! ", "" };
+		String[] priorities = { "!!! ", "!! ", "* ", "! ", "(ic) ", "" };
 
 		String result = "";
 		for (int p = 0; p < priorities.length; p++) {
@@ -562,6 +682,8 @@ public class AliensEngine extends Engine {
 				String s = (String) status.elementAt(i);
 				if (s.startsWith(prefix)) {
 					s = s.substring(prefix.length());
+					if (prefix.equals("(ic) "))
+						s = ic(s);
 					result += s + "; ";
 					status.removeElementAt(i--);
 				}

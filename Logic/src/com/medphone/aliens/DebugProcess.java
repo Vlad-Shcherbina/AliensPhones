@@ -10,7 +10,7 @@ class DebugProcess extends AliensProcess {
 	public void event() {
 		switch (stage) {
 		case 0:
-			addNotification(a().getDebugInfo());
+			addNotification("* "+a().getDebugInfo());
 			break;
 		}
 	}
