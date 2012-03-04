@@ -47,7 +47,6 @@ public class Yellow extends AliensProcess {
 		if (a().rand(100) < dmg)
 			a().poisoning = true;
 		
-		// TODO: clarify antialvine reduction
 	}
 
 	public void event() {

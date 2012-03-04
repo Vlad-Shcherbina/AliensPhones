@@ -16,6 +16,8 @@ for name in reusable:
 counts = dict(
     AntiAlvine=10,
     Surfaktant=10,
+    PlasmaToxone=10,
+    BenzylAlienat=10,
     )
 
 for name in unique:
@@ -32,4 +34,4 @@ for name in unique:
 
 print len(used), 'codes total'
 
-assert not counts
+assert not counts, counts
