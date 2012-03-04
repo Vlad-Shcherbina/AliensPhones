@@ -11,6 +11,7 @@ public class PlasmaToxone extends AliensProcess {
 	public void event() {
 		switch (stage) {
 		case 0:
+			// TODO: add 30 sepsis hits
 			addNotification("Я почувствовал{/а} обычный, казалось бы, укол.");
 			stage = 1;
 			schedule(1);

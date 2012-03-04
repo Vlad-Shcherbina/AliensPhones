@@ -96,8 +96,8 @@ public class AliensEngine extends Engine {
 
 	public boolean poisoning;
 
-	int liver;
-	int kidneys;
+	public int liver;
+	public int kidneys;
 
 	int painTolerance;
 
@@ -218,7 +218,8 @@ public class AliensEngine extends Engine {
 	public String getDebugInfo() {
 		String s = VERSION + " ";
 
-		s += "lungs(" + lungs + "," + lungsRenewable + "); ";
+		s += "lungs("+lungs+","+lungsRenewable+"); ";
+		s += "LK("+liver+","+kidneys+"); ";
 
 		s += "[";
 		for (int i = 0; i < queue.size(); i++) {
@@ -257,6 +258,10 @@ public class AliensEngine extends Engine {
 	}
 
 	void addLiverStatus() {
+		
+		if (liver > 600)
+			liver = 600;
+		
 		int s = 0;
 		if (liver < 100)
 			s = 3;
@@ -264,6 +269,7 @@ public class AliensEngine extends Engine {
 			s = 2;
 		else if (liver < 300)
 			s = 1;
+		
 		if (poisoning)
 			s++;
 
@@ -291,6 +297,9 @@ public class AliensEngine extends Engine {
 	}
 
 	private void addKidneyStatus() {
+		if (kidneys > 600)
+			kidneys = 600;
+		
 		int s = 0;
 		if (kidneys < 100)
 			s = 3;
@@ -334,7 +343,7 @@ public class AliensEngine extends Engine {
 				System.out.println("error parsing weakness");
 			}
 		}
-		// TODO: modify by echinospore, friz, methanol-cyanide
+		// TODO: modify by echinospore, friz, methanol-cyanide, dichloflu
 		switch (weakness) {
 		case 0:
 			break;
@@ -402,7 +411,7 @@ public class AliensEngine extends Engine {
 		if (max == 3)
 			painTolerance--;
 		else
-			painTolerance = 9;
+			painTolerance = 5;
 
 		if (painTolerance <= 0)
 			schedule(new UnbearablePain(), 0);
@@ -509,7 +518,7 @@ public class AliensEngine extends Engine {
 
 		if (!alive) {
 			queue = new Vector();
-			return "Я МЕРТВ{/А}";
+			return "Я МЕРТВ{/А}; (игрок, выключи телефон!)";
 		}
 
 		if (!conscious) {

@@ -11,8 +11,10 @@ public class Surfaktant extends AliensProcess {
 
 	public
 	void event() {
-		if (stage == 0)
+		if (stage == 0) {
 			addNotification("Ай, укол!");
+			a().cancelProcess(getName());
+		}
 		if (stage < 60) {
 			a().lungs += 1;
 			stage += 1;
