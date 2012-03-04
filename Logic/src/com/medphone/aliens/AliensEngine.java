@@ -254,13 +254,16 @@ public class AliensEngine extends Engine {
 		// TODO: bleeding
 
 		int speed = 30; // per hour
-		// TODO: erpoitin speedup
+
+		if (hasProcess(new Erpoiteen().getName()))
+			speed *= 20;
 		
 		speed = speed*liver/600;
 		
 		blood += speed / 60;
 		if (rand(60) < speed%60)
 			blood += 1;
+		
 		
 		if (blood < 0) {
 			die("Из меня вытекло слишком много крови и я умер{/ла}.");
