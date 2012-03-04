@@ -1,6 +1,8 @@
 reusable = [
+    "Backdoors", # placeholder
     "Reset",
     "DebugProcess",
+    "DamageLungs",
 
     "Cross",
     "Safe",
@@ -19,35 +21,33 @@ reusable = [
 ]
 
 unique = [
-    #"Surfactant",
-    #"Antialvin",
-    #"Travian",
     "Sambuca",
 
     "Surfaktant",
     "AntiAlvine",
     "PlasmaToxone",
-    "BenzylAlienat",
-]
 
-"""
-    "AbdominalSurgery",
-    "CardCodes.!py",
+    "BenzylAlienat",
+    "EssenceCita",
+    "PlasmoDialite",
+
+
+    "***break***",
+
     "Citosolute",
     "Cyprostane",
+    
+    "AbdominalSurgery",
     "DichloFlu",
     "Ehinospore",
     "Erpoiteen",
-    "EssenceCita",
     "Facehugger",
-    "FirstAidKit",
     "FirstAidKitLeftArm",
     "FirstAidKitLeftLeg",
     "FirstAidKitRightArm",
     "FirstAidKitRightLeg",
     "FirstAidKitTorso",
     "Friz",
-    "FybrinogenLocal",
     "FybrinogenLocalLeftArm",
     "FybrinogenLocalLeftLeg",
     "FybrinogenLocalRightArm",
@@ -60,19 +60,15 @@ unique = [
     "MethMorthine",
     "MonoFloxacyne",
     "Perftoran",
-    "PlasmoDialite",
     "PolyPiroCetam",
     "RemovalSurgery",
     "Requre",
-    "Sambuca",
     "StreptonideTonine",
-    "Urcaine",
     "UrcaineLeftArm",
     "UrcaineLeftLeg",
     "UrcaineRightArm",
     "UrcaineRightLeg",
     "UrcaineTorso",
-    "VascularSurgery",
     "VascularSurgeryLeftArm",
     "VascularSurgeryLeftLeg",
     "VascularSurgeryRightArm",
@@ -80,6 +76,13 @@ unique = [
     "VascularSurgeryTorso",
     "Warfareen",
     "WarfareenSalicylat",
+	
+    "RandomEventGood",
+    "RandomEventEvil",
+]
+
+"""
+    
 ]
 """
 
@@ -96,3 +99,15 @@ def get_code_path(name):
 
 def get_codes(name):
     return [c.strip() for c in open(get_code_path(name)).readlines()]
+
+def phoneword(s):
+    t = 'abc,def,ghi,jkl,mno,pqrs,tuv,wxyz'.split(',')
+    result = ''
+    for c in s:
+        for i, key in enumerate(t, 2):
+            if c in key:
+                result += str(i)
+                break
+        else:
+            result += c
+    return result

@@ -1,23 +1,13 @@
-from codes import reusable, unique, get_code_path
+from codes import reusable, unique, get_code_path, phoneword
 from prefix import PrefixSet
-
-def phoneword(s):
-    t = 'abc,def,ghi,jkl,mno,pqrs,tuv,wxyz'.split(',')
-    result = ''
-    for c in s:
-        for i, key in enumerate(t, 2):
-            if c in key:
-                result += str(i)
-                break
-        else:
-            result += c
-    return result
         
 codes_dir = 'codes/'
 
 result = []
 used = PrefixSet()
 for name in reusable+unique:
+    if name == '***break***':
+        break
     print name
     result.append('\t\t"{}", new Boolean({}), '.format(name, str(name in reusable).lower()))
 
@@ -38,6 +28,8 @@ print len(used), 'codes total'
 
 cases = []
 for name in reusable+unique:
+    if name == '***break***':
+        break
     cases.append(
        '\t\tif (name.equals("{0}"))\n'
 	   '\t\t\treturn new {0}();\n'.format(name))

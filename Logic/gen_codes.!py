@@ -1,0 +1,87 @@
+from random import randrange, seed
+from prefix import PrefixSet
+
+from codes import reusable, unique, get_code_path, get_codes, phoneword
+
+seed(123)
+
+used = PrefixSet()
+
+for name in reusable:
+    codes = get_codes(name)
+    for code in codes:
+        used.add(phoneword(code))
+
+
+counts = dict(
+    Sambuca=1,
+    AntiAlvine=12,
+    Surfaktant=36,
+    PlasmaToxone=48,
+    BenzylAlienat=36,
+    EssenceCita=18,
+    PlasmoDialite=18,
+    
+    Citosolute=30,
+    Cyprostane=24,
+   
+    AbdominalSurgery=12,
+    DichloFlu=48,
+    Ehinospore=40,
+    Erpoiteen=40,
+    Facehugger=12,
+    FirstAidKitLeftArm=30,
+    FirstAidKitLeftLeg=30,
+    FirstAidKitRightArm=30,
+    FirstAidKitRightLeg=30,
+    FirstAidKitTorso=30,
+    Friz=30,
+    FybrinogenLocalLeftArm=18,
+    FybrinogenLocalLeftLeg=18,
+    FybrinogenLocalRightArm=18,
+    FybrinogenLocalRightLeg=18,
+    FybrinogenLocalTorso=18,
+    GetAnalysis=50,
+    Healer=6,
+    Klodil=24,
+    MetanolCyanide=24,
+    MethMorthine=48,
+    MonoFloxacyne=24,
+    Perftoran=80,
+    PolyPiroCetam=20,
+    RemovalSurgery=8,
+    Requre=8,
+    StreptonideTonine=24,
+    UrcaineLeftArm=36,
+    UrcaineLeftLeg=36,
+    UrcaineRightArm=36,
+    UrcaineRightLeg=36,
+    UrcaineTorso=36,
+    VascularSurgeryLeftArm=12,
+    VascularSurgeryLeftLeg=12,
+    VascularSurgeryRightArm=12,
+    VascularSurgeryRightLeg=12,
+    VascularSurgeryTorso=12,
+    Warfareen=48,
+    WarfareenSalicylat=12,
+	
+    RandomEventGood=6,
+    RandomEventEvil=6,
+    )
+
+for name in unique:
+    if name in counts:
+        with open(get_code_path(name), 'w') as fout:
+            for _ in range(counts[name]):
+                while True:
+                    code = str(randrange(10**5, 10**6))
+                    if used.can_add(code):
+                        break;
+                used.add(code)
+                print>>fout, code
+        del counts[name]
+
+print len(used), 'codes total'
+
+assert not counts, counts
+
