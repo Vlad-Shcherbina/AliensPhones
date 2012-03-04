@@ -93,7 +93,7 @@ public class Main extends MIDlet implements CommandListener {
 				Alert a = new Alert(" ", "Перечитай текст", null, AlertType.ALARM);
 				a.setTimeout(300);
 				
-				display.setCurrent(a, mainScreen);		
+				display.setCurrent(a, mainScreen);
 				a.getType().playSound(display);
 			}
 			else
@@ -104,6 +104,7 @@ public class Main extends MIDlet implements CommandListener {
 			schedule(TICK_DURATION);
 		}
 		else {
+			setMainText(" ");
 			notify((String)tick_result.notifications.elementAt(0));
 			schedule(NOTIFICATION);
 		}

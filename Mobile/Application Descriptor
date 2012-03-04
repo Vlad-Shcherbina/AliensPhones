@@ -1,7 +1,7 @@
-MIDlet-Version: 1.2.1
+MIDlet-Version: 2.0.0
 MIDlet-Vendor: Vlad
 MIDlet-Jar-URL: aliens.jar
 MicroEdition-Configuration: CLDC-1.0
 MIDlet-1: Main,,Main
 MicroEdition-Profile: MIDP-1.0
-MIDlet-Name: AliensDemo
+MIDlet-Name: Aliens
