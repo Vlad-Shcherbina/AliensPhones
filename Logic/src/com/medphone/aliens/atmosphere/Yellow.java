@@ -10,7 +10,7 @@ public class Yellow extends AliensProcess {
 	}
 	
 	protected String getMessage() {
-		return "Я услышал{/а} тихое шипение.";
+		return "Я почувствовал{/а} кислый привкус во рту.";
 	}
 	
 	protected int getDamage() {

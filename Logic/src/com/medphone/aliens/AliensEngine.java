@@ -71,7 +71,7 @@ public class AliensEngine extends Engine {
 		};
 	
 	static final String[] PAIN_STRENGTH = {
-		null, "немного болит", "! болит", "!! дико болит"
+		null, "немного болит", "!! болит", "!!! дико болит"
 	};
 	
 	static int getPainAreaIndex(String area) {
@@ -104,6 +104,8 @@ public class AliensEngine extends Engine {
 	int liver;
 	int kidneys;
 	
+	int painTolerance;
+	
 	////////////////////////
 	
 	public void reset() {
@@ -125,6 +127,8 @@ public class AliensEngine extends Engine {
 
 		liver = 600;
 		kidneys = 600;
+		
+		painTolerance = 10;
 	}
 
 	public void serialize(Serializer ser) {
@@ -140,10 +144,11 @@ public class AliensEngine extends Engine {
 		
 		ser.writeInt("air", air);
 		ser.writeInt("lungs", lungs);
-		ser.writeInt("lungs_renewable", lungsRenewable);
+		ser.writeInt("lungsRenewable", lungsRenewable);
 		ser.writeBool(poisoning, "poisoning", "no poisoning");
 		ser.writeInt("liver", liver);
 		ser.writeInt("kidneys", kidneys);
+		ser.writeInt("painTolerance", painTolerance);
 
 		super.serialize(ser);
 
@@ -164,10 +169,11 @@ public class AliensEngine extends Engine {
 		
 		air = ser.readInt("air");
 		lungs = ser.readInt("lungs");
-		lungsRenewable = ser.readInt("lungs_renewable");
+		lungsRenewable = ser.readInt("lungsRenewable");
 		poisoning = ser.readBool("poisoning", "no poisoning");
 		liver = ser.readInt("liver");
 		kidneys = ser.readInt("kidneys");
+		painTolerance = ser.readInt("painTolerance");
 
 		super.deserialize(ser);
 
@@ -300,10 +306,10 @@ public class AliensEngine extends Engine {
 		case 0:
 			break;
 		case 1:
-			addStatus("я хочу пить");
+			addStatus("хочу пить");
 			break;
 		case 2:
-			addStatus("я хочу пить");
+			addStatus("хочу пить");
 			setPain("Head", 1); // TODO: clarify level
 			break;
 		case 3:
@@ -335,14 +341,14 @@ public class AliensEngine extends Engine {
 		case 0:
 			break;
 		case 1:
-			addStatus("я немного устал{/а}");
+			addStatus("я немного слаб{/а}");
 			break;
 		case 2:
 			addStatus("! я слаб{/а}");
 			addStatus("! без опоры подкашиваются ноги");
 			break;
 		case 3:
-			addStatus(ic("! я cущественно ослаб{/ла}"));
+			addStatus(ic("! я очень слаб{/а}"));
 			addStatus("! не могу встать даже на четвереньки");
 			break;
 		case 4:
@@ -388,6 +394,15 @@ public class AliensEngine extends Engine {
 		
 		if (max > 0)
 			ic("pain"+max);
+
+		if (max == 3)
+			painTolerance--;
+		else
+			painTolerance = 9;
+		
+		if (painTolerance <= 0)
+			schedule(new UnbearablePain(), 0);
+			
 		
 		if (alive && conscious) {
 			if (max == 3) {
@@ -467,12 +482,13 @@ public class AliensEngine extends Engine {
 			addStatus("жалоб нет");
 		}
 
+		if (!alive && !conscious)
+			new_conscious = true; // you wake up before death to suffer
 
-		if (alive) {
-			if (conscious && !new_conscious)
-				addNotification("Я потерял{/а} сознание.");
-			if (!conscious && new_conscious)
-				addNotification("Я приш{ел/ла} в себя.");
+		if (conscious && !new_conscious)
+			addNotification("Я потерял{/а} сознание.");
+		if (!conscious && new_conscious) {
+			result.notifications.insertElementAt("Я приш{ел/ла} в себя.", 0);
 		}
 		
 		if (!conscious && !new_conscious) {
@@ -485,8 +501,10 @@ public class AliensEngine extends Engine {
 		
 		conscious = new_conscious;
 
-		if (!alive)
+		if (!alive) {
+			queue = new Vector();
 			return "Я МЕРТВ{/А}";
+		}
 		
 		if (!conscious) {
 			for (int i = 0; i < status.size(); i++) {
@@ -499,7 +517,7 @@ public class AliensEngine extends Engine {
 
 		
 		// sort by priorities
-		String[] priorities = {"!! ", "* ", "! ", ""};
+		String[] priorities = {"!!! ", "!! ", "* ", "! ", ""};
 		
 		String result = "";
 		for (int p = 0; p < priorities.length; p++) {
@@ -546,7 +564,7 @@ public class AliensEngine extends Engine {
 			lungs = 120;
 
 		if (lungs < 0)
-			die("Мои лёгкие превратились в говно и я задохнул{ся/ась}");
+			die("Я выкашлял{/а} фрагменты лёгких и умер{/ла}.");
 	}
 
 	protected void idle() {
