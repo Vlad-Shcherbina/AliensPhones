@@ -413,8 +413,9 @@ public class AliensEngine extends Engine {
 		else
 			painTolerance = 5;
 
-		if (painTolerance <= 0)
-			schedule(new UnbearablePain(), 0);
+		Process up = new UnbearablePain();
+		if (painTolerance <= 0 && !hasProcess(up.getName()))
+			schedule(up, 0);
 
 		if (alive && conscious) {
 			if (max == 3) {
@@ -506,19 +507,40 @@ public class AliensEngine extends Engine {
 			result.notifications.insertElementAt("Я приш{ел/ла} в себя.", 0);
 		}
 
+		Vector nots = result.notifications;
 		if (!conscious && !new_conscious) {
-			if (result.notifications.size() > 0) {
+			/*if (result.notifications.size() > 0) {
 				result.notifications = new Vector();
 				addNotification("Я ничего не почувствовал{/а}.");
+			}*/
+			
+			int n_maskable = 0;
+			for (int i = 0; i < nots.size(); i++) {
+				String not = (String)nots.elementAt(i);
+				if (!not.startsWith("* ")) {
+					n_maskable++;
+					nots.removeElementAt(i--);
+				}
 			}
+			if (nots.size() == 0 && n_maskable > 0)
+				addNotification("Я ничего не почувствовал{/а}.");
 			result.importance_flag = false;
 		}
+		
+		for (int i = 0; i < nots.size(); i++) {
+			String not = (String)nots.elementAt(i);
+			if (not.startsWith("* "))
+				nots.setElementAt(not.substring(2), i);
+		}
+		
+		if (!alive)
+			result.importance_flag = false;
 
 		conscious = new_conscious;
 
 		if (!alive) {
 			queue = new Vector();
-			return "Я МЕРТВ{/А}; (игрок, выключи телефон!)";
+			return "Я МЕРТВ{/А}; (Игрок, выключи телефон! Изображай труп а потом иди к мастерам)";
 		}
 
 		if (!conscious) {
