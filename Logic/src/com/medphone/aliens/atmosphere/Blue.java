@@ -7,7 +7,7 @@ public class Blue extends Yellow {
 	}
 	
 	protected String getMessage() {
-		return "Я услышал{/а} аццкое шипение и почувствовал{/а} " +
+		return "Я услышал{/а} адское шипение и почувствовал{/а} " +
 				"кислый привкус во рту.";
 	}
 	

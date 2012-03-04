@@ -10,6 +10,8 @@ import com.medphone.aliens.drugs.*;
 
 
 public class AliensEngine extends Engine {
+	
+	final static String VERSION = "v0.1";
 
 	Hashtable used_codes;
 	Hashtable index_by_code = null;
@@ -55,10 +57,38 @@ public class AliensEngine extends Engine {
 		}
 	}
 
+	
+	static final String[] PAIN_AREAS = {
+		"Everywhere",
+		"LeftArm", "RightArm", "LeftLeg", "RightLeg", 
+		"Stomach", "Chest", "Loin", "Head"
+		};
+	
+	static final String[] PAIN_AREA_NAMES = {
+		"всё тело",
+		"левая рука", "правая рука", "левая нога", "правая нога",
+		"живот", "в груди", "в пояснице", "голова"
+		};
+	
+	static final String[] PAIN_STRENGTH = {
+		null, "немного болит", "! болит", "!! дико болит"
+	};
+	
+	static int getPainAreaIndex(String area) {
+		for (int i = 0; i < PAIN_AREAS.length; i++)
+			if (area.equals(PAIN_AREAS[i]))
+				return i;
+		return -1;
+	}
+
+	/////  internal state  //////
+	
 	int time;
 
 	boolean alive;
 	boolean conscious;
+	
+	int blood;
 
 	public static final int SAFE = 0;
 	public static final int GASP = 1;
@@ -73,8 +103,9 @@ public class AliensEngine extends Engine {
 
 	int liver;
 	int kidneys;
-
-
+	
+	////////////////////////
+	
 	public void reset() {
 		super.reset();
 
@@ -84,6 +115,8 @@ public class AliensEngine extends Engine {
 
 		alive = true;
 		conscious = true;
+		
+		blood = 3000;
 
 		air = SAFE;
 		lungs = 120;
@@ -102,6 +135,8 @@ public class AliensEngine extends Engine {
 		
 		ser.writeBool(alive, "alive", "dead");
 		ser.writeBool(conscious, "conscious", "unconscious");
+		
+		ser.writeInt("blood", blood);
 		
 		ser.writeInt("air", air);
 		ser.writeInt("lungs", lungs);
@@ -124,6 +159,8 @@ public class AliensEngine extends Engine {
 		
 		alive = ser.readBool("alive", "dead");
 		conscious = ser.readBool("conscious", "unconscious");
+		
+		blood = ser.readInt("blood");
 		
 		air = ser.readInt("air");
 		lungs = ser.readInt("lungs");
@@ -169,7 +206,7 @@ public class AliensEngine extends Engine {
 	}
 
 	public String getDebugInfo() {
-		String s = "";
+		String s = VERSION+" ";
 
 		s += "lungs(" + lungs + "," + lungsRenewable + "); ";
 
@@ -193,12 +230,14 @@ public class AliensEngine extends Engine {
 		// TODO: dichloflu effects
 		// TODO: phrasing, pain
 		if (x < 0) {
-			addStatus(ic("у меня жесточайший кровавый кашель, Б3 в груди, частое дыхание"));
+			addStatus(ic("! у меня жесточайший кровавый кашель; частое дыхание"));
 			setWeakness(3);
+			setPain("Chest", 3);
 		}
 		else if (x < 25) {
-			addStatus(ic("боль в груди Б???, кашель с кровью"));
+			addStatus(ic("! кашель с кровью"));
 			setWeakness(3);
+			setPain("Chest", 2);
 		}
 		else if (x < 50) {
 			addStatus(ic("у меня одышка"));
@@ -227,17 +266,19 @@ public class AliensEngine extends Engine {
 		case 0:
 			break;
 		case 1:
-			addStatus("боль в правом подреберье(?!) Б1");
 			setWeakness(1);
+			setPain("Stomach", 1); // TODO: правое подреберье?
 			break;
 		case 2:
-			addStatus(ic("Б2, меня постоянно тошнит"));
+			addStatus(ic("! меня постоянно тошнит"));
 			setWeakness(1);
+			setPain("Stomach", 2); // TODO: правое подреберье?
 			break;
 		case 3:
 		case 4:
-			addStatus(ic("Б3, меня рвёт"));
+			addStatus(ic("! меня рвёт"));
 			setWeakness(1);
+			setPain("Stomach", 3); // TODO: правое подреберье?
 			break;
 		}
 		if (liver < 0)
@@ -262,10 +303,12 @@ public class AliensEngine extends Engine {
 			addStatus("я хочу пить");
 			break;
 		case 2:
-			addStatus(ic("я хочу пить; болит голова Б???"));
+			addStatus("я хочу пить");
+			setPain("Head", 1); // TODO: clarify level
 			break;
 		case 3:
-			addStatus(ic("Б3, боль в пояснице"));
+			// TODO: head?
+			setPain("Loin", 3);
 			setWeakness(3);
 			break;
 		default:
@@ -295,23 +338,69 @@ public class AliensEngine extends Engine {
 			addStatus("я немного устал{/а}");
 			break;
 		case 2:
-			addStatus("я слаб{/а}");
-			addStatus("без опоры подкашиваются ноги");
+			addStatus("! я слаб{/а}");
+			addStatus("! без опоры подкашиваются ноги");
 			break;
 		case 3:
-			addStatus(ic("я cущественно ослаб{/ла}"));
-			addStatus("не могу встать даже на четвереньки");
+			addStatus(ic("! я cущественно ослаб{/ла}"));
+			addStatus("! не могу встать даже на четвереньки");
 			break;
 		case 4:
 		case 5:
-			addStatus(ic("я дико ослаб{/ла}"));
-			addStatus("не могу даже пальцем пошевелить");
+			addStatus(ic("! я дико ослаб{/ла}"));
+			addStatus("! не могу даже пальцем пошевелить");
 			break;
 		default:
 			break;
 		}
 	}
 	
+	
+	void addPainStatus() {
+		for (int i = 0; i < pain.length; i++) {
+			String[] pp = collectAttrs("pain"+PAIN_AREAS[i]);
+			for (int j = 0; j < pp.length; j++) {
+				try {
+					int level = Integer.parseInt(pp[j]);
+					setPain(PAIN_AREA_NAMES[i], level);
+				}
+				catch (NumberFormatException e) {
+					System.out.println("Error parsing pain");
+				}
+			}
+		}
+		
+		// TODO: анестетики
+		int everywhereIndex = getPainAreaIndex("Everywhere");
+		int max = 0;
+		for (int i = 0; i < pain.length; i++) {
+			if (pain[i] > max)
+				max = pain[i];
+			if (pain[i] > pain[everywhereIndex]) {
+				String p = PAIN_STRENGTH[pain[i]];
+				if (p != null)
+					addStatus(p+" "+PAIN_AREA_NAMES[i]);
+			}
+		}
+		String p = PAIN_STRENGTH[pain[everywhereIndex]];
+		if (p != null)
+			addStatus(p+" "+PAIN_AREA_NAMES[everywhereIndex]);
+		
+		if (max > 0)
+			ic("pain"+max);
+		
+		if (alive && conscious) {
+			if (max == 3) {
+				if (time%2 == 0) {
+					addNotification("Ору от боли!"); // TODO: various messages
+				}
+			}
+			else if (max == 2)
+				if (time%2 == 0) {
+					important();
+				}
+		}
+	}
 	
 	//String status;
 	Vector status;
@@ -327,10 +416,19 @@ public class AliensEngine extends Engine {
 		if (w > weakness)
 			weakness = w;
 	}
+	
+	int[] pain;
+	
+	void setPain(String area, int level) {
+		int index = getPainAreaIndex(area);
+		if (pain[index] < level)
+			pain[index] = level;
+	}
 
 	
 
 	protected String getStatus() {
+		pain = new int[PAIN_AREAS.length];
 
 		status = new Vector();
 		weakness = 0;
@@ -352,6 +450,8 @@ public class AliensEngine extends Engine {
 		addKidneyStatus();
 		
 		addWeaknessStatus();
+		
+		addPainStatus();
 		
 
 		if (air == SAFE)
@@ -377,7 +477,7 @@ public class AliensEngine extends Engine {
 		
 		if (!conscious && !new_conscious) {
 			if (result.notifications.size() > 0) {
-				result.notifications.clear();
+				result.notifications = new Vector();
 				addNotification("Я ничего не почувствовал{/а}.");
 			}
 			result.importance_flag = false;
@@ -397,12 +497,21 @@ public class AliensEngine extends Engine {
 			status.insertElementAt("я без сознания", 0);
 		}
 
+		
+		// sort by priorities
+		String[] priorities = {"!! ", "* ", "! ", ""};
+		
 		String result = "";
-		for (int i = 0; i < status.size(); i++) {
-			String s = (String)status.elementAt(i);
-			if (s.startsWith("* "))
-				s = s.substring(2);
-			result += s + "; ";
+		for (int p = 0; p < priorities.length; p++) {
+			String prefix = priorities[p];
+			for (int i = 0; i < status.size(); i++) {
+				String s = (String)status.elementAt(i);
+				if (s.startsWith(prefix)) {
+					s = s.substring(prefix.length());
+					result += s + "; ";
+					status.removeElementAt(i--);
+				}
+			}
 		}
 		return result;
 	}
@@ -416,7 +525,7 @@ public class AliensEngine extends Engine {
 		else if (air == RESP)
 			dmg = 1;
 		else if (air == MASK)
-			dmg = time % 2;
+			dmg = time % 3 == 0 ? 0 : 1;
 
 		if (hasProcess(new AntiAlvine().getName()))
 			dmg = dmg * (time / 2 % 2);
@@ -447,7 +556,7 @@ public class AliensEngine extends Engine {
 
 		if (poisoning) {
 			liver -= 10;
-			kidneys -= 1;
+			kidneys -= 10;
 		}
 	}
 
