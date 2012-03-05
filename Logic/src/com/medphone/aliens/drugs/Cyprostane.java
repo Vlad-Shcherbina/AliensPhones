@@ -10,7 +10,7 @@ public class Cyprostane extends AliensProcess {
 
 	public void event() {
 		if (stage == 0) {
-			addNotification("Я проглотил капсулу.");
+			addNotification("Я проглотил{/а} капсулу.");
 			stage = 1;
 			schedule(30);
 		}

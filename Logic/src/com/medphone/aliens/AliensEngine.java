@@ -273,6 +273,7 @@ public class AliensEngine extends Engine {
 		return
 		    !conscious ||
 			hasProcess(new MethMorthine().getName(), 1) ||
+			hasProcess(new MethMorthine().getName(), 2) || 
 			hasProcess(new MethMorthine().getName(), 3) || 
 			hasProcess(new MetanolCyanide().getName(), 1) ||
 			hasProcess(new MetanolCyanide().getName(), 2) ||
@@ -348,6 +349,8 @@ public class AliensEngine extends Engine {
 				String name = e.process.getName();
 				if (name.equals("LeftArm"))
 					s += " из левой руки";
+				else if (name.equals("LiverWound"))
+					s += " из раны на правом боку";
 				// TODO: other places
 				else
 					System.out.println("Unrecognized bleeding place "+name);
@@ -597,11 +600,12 @@ public class AliensEngine extends Engine {
 
 		int everywhereIndex = getPainAreaIndex("Everywhere");
 		
-		boolean noNarc = 
+		boolean nonNarc = 
 				hasProcess(new BenzylAlienat().getName(), 2)
 			 || hasProcess(new WarfareenSalicylat().getName(), 2);
 		boolean narc = 
 				hasProcess(new MethMorthine().getName(), 1) 
+			 ||	hasProcess(new MethMorthine().getName(), 2) 
 			 ||	hasProcess(new MethMorthine().getName(), 3) 
 			 || hasProcess(new MetanolCyanide().getName(), 1)
 			 || hasProcess(new MetanolCyanide().getName(), 2);
@@ -614,7 +618,7 @@ public class AliensEngine extends Engine {
 					hasProcess("FirstAidKit"+PAIN_AREAS[i], 2)) {
 				pain[i] = pain[i] == 3 ? 2 : 0;
 			}
-			else if (noNarc && pain[i] != 3 && pain[i] != 0)
+			else if (nonNarc && pain[i] != 3 && pain[i] != 0)
 				pain[i]--;
 		}
 		
@@ -637,14 +641,14 @@ public class AliensEngine extends Engine {
 
 		if (alive && conscious) {
 
-			if (max == 3)
+			if (max == 3) {
 				painTolerance--;
-			else
+				Process up = new UnbearablePain();
+				if (painTolerance <= 0 && !hasProcess(up.getName()))
+					schedule(up, 0);
+			} else
 				painTolerance = 5;
 
-			Process up = new UnbearablePain();
-			if (painTolerance <= 0 && !hasProcess(up.getName()))
-				schedule(up, 0);
 			
 			if (max == 3) {
 				if (time % 2 == 0) {

@@ -1,24 +1,21 @@
 package com.medphone.aliens.drugs;
 
 import com.medphone.aliens.AliensProcess;
+import com.medphone.aliens.LiverWound;
 
-public class VascularSurgeryLeftArm extends AliensProcess {
-
-	protected String getMemberName() {
-		return "LeftArm";
-	}
+public class VascularSurgeryTorso extends AliensProcess {
 
 	public String getName() {
-		return "VascularSurgery"+getMemberName();
+		return "VascularSurgeryTorso";
 	}
 
 	public void event() {
 		switch (stage) {
 		case 0:
 			addNotification("* Меня оперируют...");
-			if (a().operationSuccessful(getMemberName())) {
+			if (a().operationSuccessful("no local urcaine")) {
 				addNotification("* Уже зашивают. Как быстро!");
-				a().cancelProcess(getMemberName());
+				a().cancelProcess(new LiverWound().getName());
 			}
 			else {
 				addNotification("* Очень больно!");
@@ -35,14 +32,14 @@ public class VascularSurgeryLeftArm extends AliensProcess {
 			break;
 		case 1:
 			stage = 2;
-			schedule(10);
+			schedule(25);
 			break;
 		case 2:
 			stage = 3;
-			schedule(10);
+			schedule(25);
 			break;
 		}
-
+		
 	}
 
 }

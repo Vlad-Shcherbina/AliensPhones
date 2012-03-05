@@ -5,6 +5,7 @@ reusable = [
     "DamageLungs",
 
     "UnbearablePain",
+    "LiverWound",
 
     "Cross",
     "Safe",
@@ -15,11 +16,11 @@ reusable = [
     "Yellow",
     "Blue",
 
+    "Torso",
     "LeftArm",
     "RightArmDemo",
     "LeftLegDemo",
     "RightLegDemo",
-    "TorsoDemo",
 ]
 
 unique = [
@@ -61,8 +62,8 @@ unique = [
 
     "Perftoran",
 
+    "VascularSurgeryTorso",
     "VascularSurgeryLeftArm",
-    
 
     "***break***",
 
@@ -92,7 +93,6 @@ unique = [
     "VascularSurgeryLeftLeg",
     "VascularSurgeryRightArm",
     "VascularSurgeryRightLeg",
-    "VascularSurgeryTorso",
 	
     "RandomEventGood",
     "RandomEventEvil",

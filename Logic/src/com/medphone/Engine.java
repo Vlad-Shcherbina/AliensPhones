@@ -67,7 +67,7 @@ public abstract class Engine {
 	protected Vector queue = new Vector();
 	
 
-	protected void schedule(Process process, int dt) {
+	public void schedule(Process process, int dt) {
 		process.engine = this;
 		Event q = new Event();
 		q.t = dt;
