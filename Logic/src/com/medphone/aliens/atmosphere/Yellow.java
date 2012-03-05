@@ -44,8 +44,19 @@ public class Yellow extends AliensProcess {
 			a().lungsRenewable = 0;
 		}
 		
-		if (a().rand(100) < dmg)
-			a().poisoning = true;
+		if (a().poisoning.equals(a().NO_POISONING) && a().rand(100) < dmg) {
+			switch (a().rand(3)) {
+			case 0:
+				a().poisoning = a().LUNGS_POISONING;
+				break;
+			case 1:
+				a().poisoning = a().LIVER_POISONING;
+				break;
+			case 2:
+				a().poisoning = a().KIDNEY_POISONING;
+				break;
+			}
+		}
 		
 	}
 

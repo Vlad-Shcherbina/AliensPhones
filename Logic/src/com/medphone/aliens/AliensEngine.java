@@ -94,7 +94,11 @@ public class AliensEngine extends Engine {
 	public int lungs;
 	public int lungsRenewable;
 
-	public boolean poisoning;
+	public static final String NO_POISONING = "no poisoning";
+	public static final String LUNGS_POISONING = "lungs poisoning";
+	public static final String LIVER_POISONING = "liver poisoning";
+	public static final String KIDNEY_POISONING = "kidney poisoning";
+	public String poisoning;
 
 	public int liver;
 	public int kidneys;
@@ -102,7 +106,7 @@ public class AliensEngine extends Engine {
 	int painTolerance;
 	
 	public boolean sepsis;
-	int sepsisHits;
+	public int sepsisHits;
 	
 	int prevMobility;
 
@@ -123,7 +127,7 @@ public class AliensEngine extends Engine {
 		air = SAFE;
 		lungs = 120;
 		lungsRenewable = 120;
-		poisoning = false;
+		poisoning = NO_POISONING;
 
 		liver = 600;
 		kidneys = 600;
@@ -150,7 +154,7 @@ public class AliensEngine extends Engine {
 		ser.writeInt("air", air);
 		ser.writeInt("lungs", lungs);
 		ser.writeInt("lungsRenewable", lungsRenewable);
-		ser.writeBool(poisoning, "poisoning", "no poisoning");
+		ser.writeString(poisoning);
 		ser.writeInt("liver", liver);
 		ser.writeInt("kidneys", kidneys);
 		ser.writeInt("painTolerance", painTolerance);
@@ -178,7 +182,7 @@ public class AliensEngine extends Engine {
 		air = ser.readInt("air");
 		lungs = ser.readInt("lungs");
 		lungsRenewable = ser.readInt("lungsRenewable");
-		poisoning = ser.readBool("poisoning", "no poisoning");
+		poisoning = ser.readString();
 		liver = ser.readInt("liver");
 		kidneys = ser.readInt("kidneys");
 		painTolerance = ser.readInt("painTolerance");
@@ -264,6 +268,8 @@ public class AliensEngine extends Engine {
 		if (rand(60) < speed%60)
 			blood += 1;
 		
+		if (blood > 3000)
+			blood = 3000;
 		
 		if (blood < 0) {
 			die("Из меня вытекло слишком много крови и я умер{/ла}.");
@@ -286,8 +292,10 @@ public class AliensEngine extends Engine {
 
 	void addLungStatus() {
 		int x = lungs;
-		if (poisoning)
+		if (poisoning.equals(LUNGS_POISONING)) {
 			x -= 25;
+			lungs -= 1;
+		}
 		
 		String df = new DichloFlu().getName();
 		boolean maskCough = hasProcess(df, 2) || hasProcess(df, 3);
@@ -334,8 +342,10 @@ public class AliensEngine extends Engine {
 		else if (liver < 300)
 			s = 1;
 		
-		if (poisoning)
+		if (poisoning.equals(LIVER_POISONING)) {
 			s++;
+			liver -= 10;
+		}
 
 		switch (s) {
 		case 0:
@@ -371,8 +381,11 @@ public class AliensEngine extends Engine {
 			s = 2;
 		else if (kidneys < 500)
 			s = 1;
-		if (poisoning)
+		
+		if (poisoning.equals(KIDNEY_POISONING)) {
+			kidneys -= 10;
 			s++;
+		}
 
 		switch (s) {
 		case 0:
@@ -718,9 +731,6 @@ public class AliensEngine extends Engine {
 			lungsRenewable = 0;
 		}
 
-		if (poisoning)
-			lungs--;
-
 		if (lungs > 120)
 			lungs = 120;
 
@@ -732,11 +742,6 @@ public class AliensEngine extends Engine {
 		time++;
 
 		lungsIdle();
-
-		if (poisoning) {
-			liver -= 10;
-			kidneys -= 10;
-		}
 	}
 
 	int prev_ic_hash = 0;
