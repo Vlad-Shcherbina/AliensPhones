@@ -23,11 +23,18 @@ reusable = [
 ]
 
 unique = [
-    "Sambuca",
+    #"Sambuca",
 
     "Surfaktant",
     "AntiAlvine",
     "PlasmaToxone",
+
+    "Erpoiteen",
+
+    "FybrinogenLocalLeftArm",
+
+    "Warfareen",
+    "WarfareenSalicylat",
 
     "BenzylAlienat",
     "MethMorthine",
@@ -44,7 +51,7 @@ unique = [
     "Citosolute",
     "DichloFlu",
 
-    "Erpoiteen",
+    "Perftoran",
 
 
     "***break***",
@@ -69,7 +76,6 @@ unique = [
     "Healer",
     "MetanolCyanide",
     "MethMorthine",
-    "Perftoran",
     "PolyPiroCetam",
     "RemovalSurgery",
     "Requre",
@@ -82,8 +88,6 @@ unique = [
     "VascularSurgeryRightArm",
     "VascularSurgeryRightLeg",
     "VascularSurgeryTorso",
-    "Warfareen",
-    "WarfareenSalicylat",
 	
     "RandomEventGood",
     "RandomEventEvil",

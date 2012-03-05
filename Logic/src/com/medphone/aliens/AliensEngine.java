@@ -83,7 +83,7 @@ public class AliensEngine extends Engine {
 	boolean alive;
 	boolean conscious;
 
-	int blood;
+	public int blood;
 
 	public static final int SAFE = 0;
 	public static final int GASP = 1;
@@ -196,6 +196,16 @@ public class AliensEngine extends Engine {
 	}
 
 	
+	public int countProcesses(String name) {
+		int result = 0;
+		for (int i = queue.size() - 1; i >= 0; i--) {
+			Event e = (Event) queue.elementAt(i);
+			if (e.process.getName().equals(name))
+				result++;
+		}
+		return result;
+	}
+
 	public Process findProcess(String name) {
 		for (int i = queue.size() - 1; i >= 0; i--) {
 			Event e = (Event) queue.elementAt(i);
@@ -271,12 +281,31 @@ public class AliensEngine extends Engine {
 	
 	void addBloodStatus() {
 		
+		boolean hasWar =
+				hasProcess(new Warfareen().getName(), 2)
+			 || hasProcess(new WarfareenSalicylat().getName(), 2);
+		
+		if (hasWar) {
+			if (blood < 800)
+				die("У меня остановилось сердце и я умер");
+			else if (blood < 1200)
+				addStatus(ic("! учащённое дыхание"));
+		}
+		
+		int numActivePerf = 0;
 		
 		for (int i = 0; i < queue.size(); i++) {
 			Event e = (Event)queue.elementAt(i);
+			
+			if (e.process instanceof Perftoran && ((Perftoran)e.process).stage <= 5)
+				numActivePerf++;
+			
 			int k = getBleeding(e.process);
 
-			//TODO: bleeding level changes
+			//TODO: echinospore
+			
+			if (hasWar)
+				k -= 2;
 			
 			if (k < 0)
 				k = 0;
@@ -284,7 +313,7 @@ public class AliensEngine extends Engine {
 				k = 5;
 			
 			if (k > 0) {
-				String s = ""; // TODO: названия
+				String s = "";
 				if (k == 1) {
 					s = "* кровь сочится";
 					blood -= 25;
@@ -306,9 +335,18 @@ public class AliensEngine extends Engine {
 				if (name.equals("LeftArm"))
 					s += " из левой руки";
 				// TODO: other places
+				
 				addStatus(s);
 			}
 		}
+		
+		if (numActivePerf == 1)
+			addStatus("на мне пакет с красной жидкостью");
+		else if (numActivePerf >= 2 && numActivePerf <= 4)
+			addStatus("на мне "+numActivePerf+" пакета с красной жидкостью");
+		else if (numActivePerf >= 5)
+			addStatus("на мне "+numActivePerf+" пакетов с красной жидкостью");
+		
 
 		int speed = 30; // per hour
 
@@ -427,6 +465,10 @@ public class AliensEngine extends Engine {
 		if (kidneys > 600)
 			kidneys = 600;
 		
+		int perf = countProcesses(new Perftoran().getName());
+		if (perf > 2)
+			kidneys -= (perf-2)*2;
+		
 		int s = 0;
 		if (kidneys < 100)
 			s = 3;
@@ -538,7 +580,9 @@ public class AliensEngine extends Engine {
 
 		int everywhereIndex = getPainAreaIndex("Everywhere");
 		
-		boolean noNarc = hasProcess(new BenzylAlienat().getName(), 2); // TODO: or warfarin-sal
+		boolean noNarc = 
+				hasProcess(new BenzylAlienat().getName(), 2)
+			 || hasProcess(new WarfareenSalicylat().getName(), 2);
 		boolean narc = 
 				hasProcess(new MethMorthine().getName(), 1) 
 			 ||	hasProcess(new MethMorthine().getName(), 3) 

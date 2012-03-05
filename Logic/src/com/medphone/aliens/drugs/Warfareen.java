@@ -2,22 +2,22 @@ package com.medphone.aliens.drugs;
 
 import com.medphone.aliens.AliensProcess;
 
-public class UrcaineLeftArm extends AliensProcess {
+public class Warfareen extends AliensProcess {
 
 	public String getName() {
-		return "UrcaineLeftArm";
+		return "Warfareen";
 	}
 
 	public void event() {
 		switch (stage) {
 		case 0:
-			addNotification("Аккуратный укол и прохлада в левой руке.");
+			addNotification("Я разжевал{/а} таблетку.");
 			stage = 1;
-			schedule(1);
+			schedule(5);
 			break;
 		case 1:
 			stage = 2;
-			schedule(10);
+			schedule(15);
 			break;
 		}
 	}
