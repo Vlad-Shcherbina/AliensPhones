@@ -68,6 +68,9 @@ unique = [
     "VascularSurgeryLeftArm",
     "VascularSurgeryRightArm",
 
+    "Healer",
+    "Requre",
+
     "***break***",
 
     
@@ -83,12 +86,10 @@ unique = [
     "FybrinogenLocalRightArm",
     "FybrinogenLocalRightLeg",
     "GetAnalysis",
-    "Healer",
     "MetanolCyanide",
     "MethMorthine",
     "PolyPiroCetam",
     "RemovalSurgery",
-    "Requre",
     "UrcaineLeftLeg",
     "UrcaineRightLeg",
     "VascularSurgeryLeftLeg",
