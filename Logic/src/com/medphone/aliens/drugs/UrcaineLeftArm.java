@@ -4,6 +4,10 @@ import com.medphone.aliens.AliensProcess;
 
 public class UrcaineLeftArm extends AliensProcess {
 
+	public String getLocName() {
+		return "в левой руке";
+	}
+	
 	public String getName() {
 		return "UrcaineLeftArm";
 	}
@@ -11,7 +15,7 @@ public class UrcaineLeftArm extends AliensProcess {
 	public void event() {
 		switch (stage) {
 		case 0:
-			addNotification("Аккуратный укол и прохлада в левой руке.");
+			addNotification("Аккуратный укол и прохлада "+getLocName()+".");
 			stage = 1;
 			schedule(1);
 			break;

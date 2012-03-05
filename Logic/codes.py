@@ -18,7 +18,7 @@ reusable = [
 
     "Torso",
     "LeftArm",
-    "RightArmDemo",
+    "RightArm",
     "LeftLegDemo",
     "RightLegDemo",
 ]
@@ -46,9 +46,11 @@ unique = [
 
     "UrcaineTorso",
     "UrcaineLeftArm",
+    "UrcaineRightArm",
 
     "FirstAidKitTorso",
     "FirstAidKitLeftArm",
+    "FirstAidKitRightArm",
 
     "EssenceCita",
     "PlasmoDialite",
@@ -64,6 +66,7 @@ unique = [
 
     "VascularSurgeryTorso",
     "VascularSurgeryLeftArm",
+    "VascularSurgeryRightArm",
 
     "***break***",
 
@@ -73,7 +76,6 @@ unique = [
     "Facehugger",
 
     "FirstAidKitLeftLeg",
-    "FirstAidKitRightArm",
     "FirstAidKitRightLeg",
 
     "Friz",
@@ -88,10 +90,8 @@ unique = [
     "RemovalSurgery",
     "Requre",
     "UrcaineLeftLeg",
-    "UrcaineRightArm",
     "UrcaineRightLeg",
     "VascularSurgeryLeftLeg",
-    "VascularSurgeryRightArm",
     "VascularSurgeryRightLeg",
 	
     "RandomEventGood",

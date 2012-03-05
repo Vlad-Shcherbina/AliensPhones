@@ -349,6 +349,12 @@ public class AliensEngine extends Engine {
 				String name = e.process.getName();
 				if (name.equals("LeftArm"))
 					s += " из левой руки";
+				else if (name.equals("RightArm"))
+					s += " из правой руки";
+				else if (name.equals("LeftLeg"))
+					s += " из левой ноги";
+				else if (name.equals("RightLeg"))
+					s += " из правой ноги";
 				else if (name.equals("LiverWound"))
 					s += " из раны на правом боку";
 				// TODO: other places

@@ -9,14 +9,14 @@ public class FirstAidKitLeftArm extends AliensProcess {
 		return "LeftArm";
 	}
 	
-	public String getName() {
-		return "FirstAidKit"+getMemberName();
-	}
-	
 	protected String getMemberText() {
 		return "на левой руке";
 	}
 
+	public String getName() {
+		return "FirstAidKit"+getMemberName();
+	}
+	
 	public void event() {
 		switch (stage) {
 		case 0:
