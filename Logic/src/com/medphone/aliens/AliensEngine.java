@@ -81,7 +81,7 @@ public class AliensEngine extends Engine {
 	int time;
 
 	boolean alive;
-	boolean conscious;
+	public boolean conscious;
 
 	public int blood;
 
@@ -269,6 +269,16 @@ public class AliensEngine extends Engine {
 
 	}
 	
+	public boolean operationSuccessful(String loc) {
+		return
+		    !conscious ||
+			hasProcess(new MethMorthine().getName(), 1) ||
+			hasProcess(new MethMorthine().getName(), 3) || 
+			hasProcess(new MetanolCyanide().getName(), 1) ||
+			hasProcess(new MetanolCyanide().getName(), 2) ||
+			hasProcess("Urcaine"+loc);
+	}
+	
 	int getBleeding(Process p) {
 		if (p.hasAttr("bleeding") && !p.hasAttr("bleedingStopped"))
 			try {
@@ -380,7 +390,7 @@ public class AliensEngine extends Engine {
 		}
 		else if (blood < 2000) {
 			setWeakness(2);
-			addStatus("хочу пить");
+			addStatus("меня мучает жажда");
 		}
 		else if (blood < 2500) {
 			setWeakness(1);
@@ -464,7 +474,7 @@ public class AliensEngine extends Engine {
 			break;
 		}
 		if (liver < 0)
-			die("Моя печень превратилась в говно и я сдох{/ла}");
+			die("Моя печень отказала и я умер{/ла} в жутких мучениях.");
 	}
 
 	private void addKidneyStatus() {
@@ -492,14 +502,13 @@ public class AliensEngine extends Engine {
 		case 0:
 			break;
 		case 1:
-			addStatus("хочу пить");
+			addStatus("меня мучает жажда");
 			break;
 		case 2:
-			addStatus("хочу пить");
+			addStatus("меня мучает жажда");
 			setPain("Head", 1); // TODO: clarify level
 			break;
 		case 3:
-			// TODO: head?
 			setPain("Loin", 3);
 			setWeakness(3);
 			break;
@@ -508,7 +517,7 @@ public class AliensEngine extends Engine {
 		}
 
 		if (kidneys < 0)
-			die("Мои почки превратилась в говно и я сдох{/ла}");
+			die("Почки кольнули меня пару раз и я умер{/ла}.");
 	}
 
 	void addWeaknessStatus() {
@@ -814,6 +823,7 @@ public class AliensEngine extends Engine {
 		// sort by priorities
 		String[] priorities = { "!!! ", "!! ", "*!! ", "*! ", "* ", "! ", "(ic) ", "" };
 
+		// TODO: remove duplicates, like "хочу пить"
 		String result = "";
 		for (int p = 0; p < priorities.length; p++) {
 			String prefix = priorities[p];

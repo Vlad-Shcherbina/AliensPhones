@@ -26,7 +26,7 @@ public abstract class Engine {
 	
 	public void reset() {
 		queue = new Vector();
-		male = true;
+		male = false;
 	}
 	
 	public void serialize(Serializer ser) {

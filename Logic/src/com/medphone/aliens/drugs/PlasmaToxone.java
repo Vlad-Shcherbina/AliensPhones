@@ -25,7 +25,5 @@ public class PlasmaToxone extends AliensProcess {
 			a().cancelProcess(new MetanolCyanide().getName());
 			break;
 		}
-
 	}
-
 }

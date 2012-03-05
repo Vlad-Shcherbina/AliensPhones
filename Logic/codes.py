@@ -33,16 +33,20 @@ unique = [
 
     "Erpoiteen",
 
-    "FybrinogenLocalLeftArm",
-
     "Warfareen",
     "WarfareenSalicylat",
 
     "BenzylAlienat",
     "MethMorthine",
     "MetanolCyanide",
+
+    "FybrinogenLocalTorso",
+    "FybrinogenLocalLeftArm",
+
+    "UrcaineTorso",
     "UrcaineLeftArm",
 
+    "FirstAidKitTorso",
     "FirstAidKitLeftArm",
 
     "EssenceCita",
@@ -57,6 +61,8 @@ unique = [
 
     "Perftoran",
 
+    "VascularSurgeryLeftArm",
+    
 
     "***break***",
 
@@ -64,17 +70,15 @@ unique = [
     "AbdominalSurgery",
     "DichloFlu",
     "Facehugger",
-    "FirstAidKitLeftArm",
+
     "FirstAidKitLeftLeg",
     "FirstAidKitRightArm",
     "FirstAidKitRightLeg",
-    "FirstAidKitTorso",
+
     "Friz",
-    "FybrinogenLocalLeftArm",
     "FybrinogenLocalLeftLeg",
     "FybrinogenLocalRightArm",
     "FybrinogenLocalRightLeg",
-    "FybrinogenLocalTorso",
     "GetAnalysis",
     "Healer",
     "MetanolCyanide",
@@ -85,8 +89,6 @@ unique = [
     "UrcaineLeftLeg",
     "UrcaineRightArm",
     "UrcaineRightLeg",
-    "UrcaineTorso",
-    "VascularSurgeryLeftArm",
     "VascularSurgeryLeftLeg",
     "VascularSurgeryRightArm",
     "VascularSurgeryRightLeg",
