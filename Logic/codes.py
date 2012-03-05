@@ -4,6 +4,8 @@ reusable = [
     "DebugProcess",
     "DamageLungs",
 
+    "UnbearablePain",
+
     "Cross",
     "Safe",
     "Gasp",
@@ -28,6 +30,9 @@ unique = [
     "PlasmaToxone",
 
     "BenzylAlienat",
+    "MethMorthine",
+    "MetanolCyanide",
+
     "EssenceCita",
     "PlasmoDialite",
 
@@ -39,6 +44,7 @@ unique = [
     "DichloFlu",
 
     "Erpoiteen",
+
 
     "***break***",
 

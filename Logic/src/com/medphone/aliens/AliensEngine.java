@@ -132,9 +132,9 @@ public class AliensEngine extends Engine {
 		liver = 600;
 		kidneys = 600;
 
-		painTolerance = 10;
+		painTolerance = 5;
 		
-		sepsis = true;
+		sepsis = false;
 		sepsisHits = 120;
 		
 		prevMobility = 0;
@@ -420,9 +420,11 @@ public class AliensEngine extends Engine {
 				System.out.println("error parsing weakness");
 			}
 		}
-		// TODO: modify by echinospore, friz, methanol-cyanide, dichloflu
+		// TODO: modify by echinospore, friz,
 		
-		if (hasProcess(new DichloFlu().getName(), 2))
+		if (hasProcess(new MetanolCyanide().getName(), 2))
+			weakness -= 2;
+		else if (hasProcess(new DichloFlu().getName(), 2))
 			weakness--;
 		
 		int mobility = 0;
@@ -468,25 +470,30 @@ public class AliensEngine extends Engine {
 	}
 
 	void addPainStatus() {
+		pain[1] = 3;
 		for (int i = 0; i < pain.length; i++) {
 			String[] pp = collectAttrs("pain" + PAIN_AREAS[i]);
 			for (int j = 0; j < pp.length; j++) {
 				try {
 					int level = Integer.parseInt(pp[j]);
-					setPain(PAIN_AREA_NAMES[i], level);
+					setPain(PAIN_AREAS[i], level);
 				} catch (NumberFormatException e) {
 					System.out.println("Error parsing pain");
 				}
 			}
 		}
 
-		// TODO: анестетики
-		
 		int everywhereIndex = getPainAreaIndex("Everywhere");
 		
-		boolean hasBenz = hasProcess(new BenzylAlienat().getName(), 2);
+		boolean noNarc = hasProcess(new BenzylAlienat().getName(), 2); // TODO: or warfarin-sal
+		boolean narc = hasProcess(new MethMorthine().getName(), 3) 
+				|| hasProcess(new MetanolCyanide().getName(), 2);
 		for (int i = 0; i < pain.length; i++) {
-			if (hasBenz && pain[i] != 3 && pain[i] != 0)
+			if (narc) {
+				pain[i] = pain[i] == 3 ? 1 : 0;
+			}
+			// TODO: urcaine
+			else if (noNarc && pain[i] != 3 && pain[i] != 0)
 				pain[i]--;
 		}
 		
@@ -507,16 +514,17 @@ public class AliensEngine extends Engine {
 		if (max > 0)
 			ic("pain" + max);
 
-		if (max == 3)
-			painTolerance--;
-		else
-			painTolerance = 5;
-
-		Process up = new UnbearablePain();
-		if (painTolerance <= 0 && !hasProcess(up.getName()))
-			schedule(up, 0);
-
 		if (alive && conscious) {
+
+			if (max == 3)
+				painTolerance--;
+			else
+				painTolerance = 5;
+
+			Process up = new UnbearablePain();
+			if (painTolerance <= 0 && !hasProcess(up.getName()))
+				schedule(up, 0);
+			
 			if (max == 3) {
 				if (time % 2 == 0) {
 					switch (rand(3)) {
@@ -656,6 +664,7 @@ public class AliensEngine extends Engine {
 				if (!not.startsWith("* ")) {
 					n_maskable++;
 					nots.removeElementAt(i--);
+					//nots.setElementAt("masked("+not+")", i);
 				}
 			}
 			if (nots.size() == 0 && n_maskable > 0)
@@ -685,7 +694,7 @@ public class AliensEngine extends Engine {
 				if (!s.startsWith("* "))
 					status.removeElementAt(i--);
 			}
-			status.insertElementAt("я без сознания", 0);
+			status.insertElementAt("* я без сознания", 0);
 		}
 
 		// sort by priorities

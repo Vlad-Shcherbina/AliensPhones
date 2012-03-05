@@ -16,7 +16,7 @@ public class UnbearablePain extends AliensProcess {
 			schedule(9);
 			break;
 		case 1:
-			a().painTolerance = 100;
+			a().painTolerance = 5;
 		}
 	}
 
