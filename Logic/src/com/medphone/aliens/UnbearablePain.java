@@ -13,7 +13,7 @@ public class UnbearablePain extends AliensProcess {
 			addNotification("Невыносимая боль!");
 			setAttr("unconscious", "zzz");
 			stage = 1;
-			schedule(9);
+			schedule(5);
 			break;
 		case 1:
 			a().painTolerance = 5;

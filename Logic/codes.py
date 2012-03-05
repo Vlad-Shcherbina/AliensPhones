@@ -15,7 +15,7 @@ reusable = [
     "Yellow",
     "Blue",
 
-    "LeftArmDemo",
+    "LeftArm",
     "RightArmDemo",
     "LeftLegDemo",
     "RightLegDemo",
@@ -32,6 +32,7 @@ unique = [
     "BenzylAlienat",
     "MethMorthine",
     "MetanolCyanide",
+    "UrcaineLeftArm",
 
     "EssenceCita",
     "PlasmoDialite",
@@ -72,7 +73,6 @@ unique = [
     "PolyPiroCetam",
     "RemovalSurgery",
     "Requre",
-    "UrcaineLeftArm",
     "UrcaineLeftLeg",
     "UrcaineRightArm",
     "UrcaineRightLeg",

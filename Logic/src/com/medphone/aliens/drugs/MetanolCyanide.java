@@ -17,6 +17,7 @@ public class MetanolCyanide extends AliensProcess {
 			break;
 		case 1:
 			stage = 2;
+			a().cancelProcess(getName());
 			// reduce pain, improve mobility - all in AliensEngine
 			schedule(10);
 			break;

@@ -78,7 +78,7 @@ public class Yellow extends AliensProcess {
 			delAttr("unconscious");
 			setAttr("weakness", "3");
 			
-			stage = 2;
+			stage = 3;
 			schedule(14);
 			break;
 		}

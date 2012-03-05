@@ -107,9 +107,8 @@ public abstract class Engine {
 		Vector result = new Vector();
 		for (int i = 0; i < queue.size(); i++) {
 			Event e = (Event)queue.elementAt(i);
-			Object v = e.process.attrs.get(key);
-			if (v != null)
-				result.addElement((String)v);
+			if (e.process.hasAttr(key))
+				result.addElement(e.process.getAttr(key));
 		}
 		
 		String[] ss = new String[result.size()];

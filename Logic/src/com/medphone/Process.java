@@ -24,11 +24,22 @@ public abstract class Process {
 		engine.important();
 	}
 	
-	protected void setAttr(String key, String value) {
+	public void setAttr(String key, String value) {
 		attrs.put(key, value);
 	}
 	
 	protected void delAttr(String key) {
 		attrs.remove(key);
+	}
+	
+	public boolean hasAttr(String key) {
+		return attrs.containsKey(key);
+	}
+	
+	public String getAttr(String key) {
+		if (hasAttr(key))
+			return (String)attrs.get(key);
+		else
+			return "";
 	}
 }

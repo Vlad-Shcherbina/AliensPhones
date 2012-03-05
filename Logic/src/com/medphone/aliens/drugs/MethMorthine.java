@@ -16,6 +16,7 @@ public class MethMorthine extends AliensProcess {
 			schedule(1);
 			break;
 		case 1:
+			a().cancelProcess(getName());
 			setAttr("unconscious", "zzz");
 			setAttr("status", "* на самом деле в тяжёлом сне с бредом");
 			stage = 2;

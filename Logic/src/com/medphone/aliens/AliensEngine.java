@@ -195,13 +195,18 @@ public class AliensEngine extends Engine {
 		used_codes = ser.readDict();
 	}
 
-	public boolean hasProcess(String name) {
+	
+	public Process findProcess(String name) {
 		for (int i = queue.size() - 1; i >= 0; i--) {
 			Event e = (Event) queue.elementAt(i);
 			if (e.process.getName().equals(name))
-				return true;
+				return e.process;
 		}
-		return false;
+		return null;
+	}
+	
+	public boolean hasProcess(String name) {
+		return findProcess(name) != null;
 	}
 
 	public boolean hasProcess(String name, int stage) {
@@ -254,8 +259,56 @@ public class AliensEngine extends Engine {
 
 	}
 	
+	int getBleeding(Process p) {
+		if (p.hasAttr("bleeding") && !p.hasAttr("bleedingStopped"))
+			try {
+				return Integer.parseInt(p.getAttr("bleeding"));
+			}
+			catch (NumberFormatException e)
+			{}
+		return 0;
+	}
+	
 	void addBloodStatus() {
-		// TODO: bleeding
+		
+		
+		for (int i = 0; i < queue.size(); i++) {
+			Event e = (Event)queue.elementAt(i);
+			int k = getBleeding(e.process);
+
+			//TODO: bleeding level changes
+			
+			if (k < 0)
+				k = 0;
+			if (k > 5)
+				k = 5;
+			
+			if (k > 0) {
+				String s = ""; // TODO: названия
+				if (k == 1) {
+					s = "* кровь сочится";
+					blood -= 25;
+				} else if (k == 2) {
+					s = ic("*! кровь течёт");
+					blood -= 50;
+				} else if (k == 3) {
+					s = ic("*! кровь обильно течёт");
+					blood -= 100;
+				} else if (k == 4) {
+					s = ic("*!! кровь хлещет");
+					blood -= 160;
+				} else {
+					s = ic("*!! кровь бьёт фонтаном");
+					blood -= 270;
+				}
+				
+				String name = e.process.getName();
+				if (name.equals("LeftArm"))
+					s += " из левой руки";
+				// TODO: other places
+				addStatus(s);
+			}
+		}
 
 		int speed = 30; // per hour
 
@@ -470,7 +523,7 @@ public class AliensEngine extends Engine {
 	}
 
 	void addPainStatus() {
-		pain[1] = 3;
+		//pain[1] = 3;
 		for (int i = 0; i < pain.length; i++) {
 			String[] pp = collectAttrs("pain" + PAIN_AREAS[i]);
 			for (int j = 0; j < pp.length; j++) {
@@ -486,13 +539,18 @@ public class AliensEngine extends Engine {
 		int everywhereIndex = getPainAreaIndex("Everywhere");
 		
 		boolean noNarc = hasProcess(new BenzylAlienat().getName(), 2); // TODO: or warfarin-sal
-		boolean narc = hasProcess(new MethMorthine().getName(), 3) 
-				|| hasProcess(new MetanolCyanide().getName(), 2);
+		boolean narc = 
+				hasProcess(new MethMorthine().getName(), 1) 
+			 ||	hasProcess(new MethMorthine().getName(), 3) 
+			 || hasProcess(new MetanolCyanide().getName(), 1)
+			 || hasProcess(new MetanolCyanide().getName(), 2);
 		for (int i = 0; i < pain.length; i++) {
 			if (narc) {
 				pain[i] = pain[i] == 3 ? 1 : 0;
 			}
-			// TODO: urcaine
+			else if (hasProcess("Urcaine"+PAIN_AREAS[i], 2)) {
+				pain[i] = pain[i] == 3 ? 2 : 0;
+			}
 			else if (noNarc && pain[i] != 3 && pain[i] != 0)
 				pain[i]--;
 		}
@@ -544,6 +602,8 @@ public class AliensEngine extends Engine {
 					important();
 				}
 		}
+		else
+			painTolerance = 5;
 	}
 	
 	void addSepsisStatus() {
@@ -661,7 +721,7 @@ public class AliensEngine extends Engine {
 			int n_maskable = 0;
 			for (int i = 0; i < nots.size(); i++) {
 				String not = (String)nots.elementAt(i);
-				if (!not.startsWith("* ")) {
+				if (!not.startsWith("*")) {
 					n_maskable++;
 					nots.removeElementAt(i--);
 					//nots.setElementAt("masked("+not+")", i);
@@ -698,7 +758,7 @@ public class AliensEngine extends Engine {
 		}
 
 		// sort by priorities
-		String[] priorities = { "!!! ", "!! ", "* ", "! ", "(ic) ", "" };
+		String[] priorities = { "!!! ", "!! ", "*!! ", "*! ", "* ", "! ", "(ic) ", "" };
 
 		String result = "";
 		for (int p = 0; p < priorities.length; p++) {
