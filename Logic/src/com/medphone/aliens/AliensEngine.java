@@ -284,12 +284,13 @@ public class AliensEngine extends Engine {
 		boolean hasWar =
 				hasProcess(new Warfareen().getName(), 2)
 			 || hasProcess(new WarfareenSalicylat().getName(), 2);
+		boolean hasEhi = hasProcess(new Ehinospore().getName(), 2);
 		
 		if (hasWar) {
 			if (blood < 800)
 				die("У меня остановилось сердце и я умер");
 			else if (blood < 1200)
-				addStatus(ic("! учащённое дыхание"));
+				addStatus(ic("! мне нечем дышать"));
 		}
 		
 		int numActivePerf = 0;
@@ -301,8 +302,11 @@ public class AliensEngine extends Engine {
 				numActivePerf++;
 			
 			int k = getBleeding(e.process);
+			
+			// TODO: friz
 
-			//TODO: echinospore
+			if (hasEhi && k > 0)
+				k += 1;
 			
 			if (hasWar)
 				k -= 2;
@@ -335,17 +339,19 @@ public class AliensEngine extends Engine {
 				if (name.equals("LeftArm"))
 					s += " из левой руки";
 				// TODO: other places
+				else
+					System.out.println("Unrecognized bleeding place "+name);
 				
 				addStatus(s);
 			}
 		}
 		
 		if (numActivePerf == 1)
-			addStatus("на мне пакет с красной жидкостью");
+			addStatus("* на мне пакет с красной жидкостью");
 		else if (numActivePerf >= 2 && numActivePerf <= 4)
-			addStatus("на мне "+numActivePerf+" пакета с красной жидкостью");
+			addStatus("* на мне "+numActivePerf+" пакета с красной жидкостью");
 		else if (numActivePerf >= 5)
-			addStatus("на мне "+numActivePerf+" пакетов с красной жидкостью");
+			addStatus("* на мне "+numActivePerf+" пакетов с красной жидкостью");
 		
 
 		int speed = 30; // per hour
@@ -517,10 +523,12 @@ public class AliensEngine extends Engine {
 		}
 		// TODO: modify by echinospore, friz,
 		
-		if (hasProcess(new MetanolCyanide().getName(), 2))
+		if (hasProcess(new MetanolCyanide().getName(), 2) ||
+			hasProcess(new Ehinospore().getName(), 2))
 			weakness -= 2;
-		else if (hasProcess(new DichloFlu().getName(), 2))
-			weakness--;
+		else if (hasProcess(new DichloFlu().getName(), 2) ||
+				 hasProcess(new Ehinospore().getName(), 1))
+			weakness -= 1;
 		
 		int mobility = 0;
 		
@@ -592,7 +600,9 @@ public class AliensEngine extends Engine {
 			if (narc) {
 				pain[i] = pain[i] == 3 ? 1 : 0;
 			}
-			else if (hasProcess("Urcaine"+PAIN_AREAS[i], 2)) {
+			else if (
+					hasProcess("Urcaine"+PAIN_AREAS[i], 2) ||
+					hasProcess("FirstAidKit"+PAIN_AREAS[i], 2)) {
 				pain[i] = pain[i] == 3 ? 2 : 0;
 			}
 			else if (noNarc && pain[i] != 3 && pain[i] != 0)

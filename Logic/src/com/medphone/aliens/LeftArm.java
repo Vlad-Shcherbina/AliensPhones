@@ -7,6 +7,10 @@ public class LeftArm extends AliensProcess {
 	public String getName() {
 		return "LeftArm";
 	}
+	
+	protected String getMessage() {
+		return "Меня ранило в левую руку!";
+	}
 
 	public void event() {
 		switch (stage) {
@@ -24,7 +28,7 @@ public class LeftArm extends AliensProcess {
 				break;
 			}
 			
-			addNotification("Меня ранило в левую руку!");
+			addNotification(getMessage());
 			if (a().rand(10) < 6)
 				setAttr("pain"+getName(), "1");
 			else
@@ -41,8 +45,8 @@ public class LeftArm extends AliensProcess {
 			
 			schedule(5);
 			break;
-		case 1: // light
-		case 2: // medium
+		case 1:
+		case 2:
 			if (a().rand(1000) < 80)
 				a().sepsis = true;
 			

@@ -29,6 +29,8 @@ unique = [
     "AntiAlvine",
     "PlasmaToxone",
 
+    "Ehinospore",
+
     "Erpoiteen",
 
     "FybrinogenLocalLeftArm",
@@ -40,6 +42,8 @@ unique = [
     "MethMorthine",
     "MetanolCyanide",
     "UrcaineLeftArm",
+
+    "FirstAidKitLeftArm",
 
     "EssenceCita",
     "PlasmoDialite",
@@ -59,7 +63,6 @@ unique = [
     
     "AbdominalSurgery",
     "DichloFlu",
-    "Ehinospore",
     "Facehugger",
     "FirstAidKitLeftArm",
     "FirstAidKitLeftLeg",
