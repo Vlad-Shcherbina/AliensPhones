@@ -26,7 +26,7 @@ public final class Main {
 		}
 		return result;
 	}
-
+	
 	static void processCode(int code) {
 	
 		int code_status = engine.codeStatus(code);
@@ -70,8 +70,30 @@ public final class Main {
 		}
 	}
 	
+	static void testSerialization() {
+		Serializer ser = new Serializer();
+		engine.serialize(ser);
+		//ser.print();
+		byte[] b = ser.getBytes();
+		//engine.reset();
+		//engine.deserialize(ser);
+		
+		ser = new Serializer();
+		ser.setBytes(b);
+		Engine e = new AliensEngine();
+		e.initialize();
+		e.deserialize(ser);
+		
+		ser = new Serializer();
+		e.serialize(ser);
+		if (!Arrays.equals(b, ser.getBytes()))
+			out.println("*** SERIALIZATION/DESERIALIZATION PROBLEM");
+		
+	}
+	
 	// return whether something important happened
 	static boolean tick() {
+		testSerialization();
 		Engine.TickResult tick_result = engine.tick();
 		time_passed++;
 		
