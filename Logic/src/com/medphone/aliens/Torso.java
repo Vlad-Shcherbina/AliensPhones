@@ -7,8 +7,18 @@ public class Torso extends AliensProcess {
 	}
 
 	public void event() {
+		
 		// TODO: other wounds
-		a().schedule(new LiverWound(), 0);
+		AliensProcess[] wounds = {new LiverWound()};
+		
+		for (int i = 0; i < wounds.length; i++)
+			if (a().hasProcess(wounds[i].getName())) {
+				addNotification("Меня отбросило. Кровавые брызги во все стороны!");
+				a().blood -= 500;
+				return;
+			}
+		
+		a().schedule(AliensTables.createProcess(wounds[a().rand(wounds.length)].getName()), 0);
 	}
 
 }

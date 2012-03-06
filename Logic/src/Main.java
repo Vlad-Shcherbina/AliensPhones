@@ -73,10 +73,9 @@ public final class Main {
 	static void testSerialization() {
 		Serializer ser = new Serializer();
 		engine.serialize(ser);
+		//out.println("*************");
 		//ser.print();
 		byte[] b = ser.getBytes();
-		//engine.reset();
-		//engine.deserialize(ser);
 		
 		ser = new Serializer();
 		ser.setBytes(b);
@@ -86,8 +85,11 @@ public final class Main {
 		
 		ser = new Serializer();
 		e.serialize(ser);
-		if (!Arrays.equals(b, ser.getBytes()))
+		//out.println("*************");
+		//ser.print();
+		if (!Arrays.equals(b, ser.getBytes())) {
 			out.println("*** SERIALIZATION/DESERIALIZATION PROBLEM");
+		}
 		
 	}
 	

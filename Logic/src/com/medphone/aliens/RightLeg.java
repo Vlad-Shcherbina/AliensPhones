@@ -1,6 +1,5 @@
-package com.medphone.aliens.drugs;
+package com.medphone.aliens;
 
-import com.medphone.aliens.LeftLeg;
 
 public class RightLeg extends LeftLeg {
 	public String getName() {

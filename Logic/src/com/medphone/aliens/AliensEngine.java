@@ -361,7 +361,8 @@ public class AliensEngine extends Engine {
 					s += " из правой ноги";
 				else if (name.equals("LiverWound"))
 					s += " из раны на правом боку";
-				// TODO: other places
+				else if (name.equals("RandomEventEvil"))
+					s += " из царапины на правой ноге";
 				else
 					System.out.println("Unrecognized bleeding place "+name);
 				

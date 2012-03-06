@@ -88,6 +88,9 @@ unique = [
 
     "Friz",
 
+    "RandomEventEvil",
+
+
     "***break***",
 
     
@@ -99,7 +102,6 @@ unique = [
     "PolyPiroCetam",
 	
     "RandomEventGood",
-    "RandomEventEvil",
 ]
 
 """

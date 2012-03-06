@@ -18,7 +18,7 @@ public class LeftLeg extends AliensProcess {
 			Process prev = a().findProcess(getName());
 			if (prev != null) {
 				if (a().rand(3) == 0) {
-					addNotification("Мне разворотило старую рану");
+					addNotification("* Мне разворотило старую рану");
 					prev.stage = 2;
 					prev.setAttr("bleeding", "4");
 					prev.setAttr("pain"+getName(), "3");
@@ -28,7 +28,7 @@ public class LeftLeg extends AliensProcess {
 				break;
 			}
 			
-			addNotification(getMessage());
+			addNotification("* "+getMessage());
 			
 			if (a().rand(2) == 0) {
 				stage = 1;
