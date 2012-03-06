@@ -269,6 +269,11 @@ public class AliensEngine extends Engine {
 
 	}
 	
+	public boolean hasAlien() {
+		return hasProcess(new Facehugger().getName()) ||
+				hasProcess(new Queen().getName());
+	}
+	
 	public boolean operationSuccessful(String loc) {
 		return
 		    !conscious ||
@@ -361,6 +366,10 @@ public class AliensEngine extends Engine {
 					s += " из правой ноги";
 				else if (name.equals("LiverWound"))
 					s += " из раны на правом боку";
+				else if (name.equals("IntestineWound"))
+					s += " из раны на животе";
+				else if (name.equals("LungWound"))
+					s += " из раны на груди";
 				else if (name.equals("RandomEventEvil"))
 					s += " из царапины на правой ноге";
 				else

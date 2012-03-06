@@ -9,7 +9,11 @@ public class Torso extends AliensProcess {
 	public void event() {
 		
 		// TODO: other wounds
-		AliensProcess[] wounds = {new LiverWound()};
+		AliensProcess[] wounds = {
+			//new LiverWound(), 
+			//new IntestineWound(),
+			new LungWound(),
+			};
 		
 		for (int i = 0; i < wounds.length; i++)
 			if (a().hasProcess(wounds[i].getName())) {

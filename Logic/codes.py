@@ -4,8 +4,14 @@ reusable = [
     "DebugProcess",
     "DamageLungs",
 
+    "Queen",
+    "Evolve",
+    "Erupt",
+
     "UnbearablePain",
     "LiverWound",
+    "IntestineWound",
+    "LungWound",
 
     "Cross",
     "Safe",
@@ -22,9 +28,8 @@ reusable = [
     "LeftLeg",
     "RightLeg",
 
-    #"AbdominalSurgery",
-    #"RemovalSurgery",
-    
+    "AbdominalSurgery",
+    "RemovalSurgery",
 
     "VascularSurgeryTorso",
     "VascularSurgeryLeftArm",
@@ -89,12 +94,12 @@ unique = [
     "Friz",
 
     "RandomEventEvil",
+    "Facehugger",
 
 
     "***break***",
 
     
-    "Facehugger",
 
     "GetAnalysis",
     "MetanolCyanide",

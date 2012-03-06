@@ -12,11 +12,7 @@ public class Citosolute extends com.medphone.aliens.AliensProcess {
 		case 0:
 			addNotification("Бодрый укол!");
 			stage = 1;
-			schedule(4);
-			break;
-		case 1:
-			stage = 2;
-			schedule(21);
+			schedule(30);
 			break;
 		}
 	}
