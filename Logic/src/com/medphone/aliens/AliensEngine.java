@@ -595,7 +595,7 @@ public class AliensEngine extends Engine {
 					"не могу встать даже на четвереньки",
 					"не могу даже пальцем пошевелить"};
 			addStatus("! "+mob[mobility]);
-			if (prevMobility < mobility)
+			if (alive && prevMobility < mobility)
 				addNotification(mob[mobility]);
 		}
 		prevMobility = mobility;

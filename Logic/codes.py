@@ -19,8 +19,8 @@ reusable = [
     "Torso",
     "LeftArm",
     "RightArm",
-    #"LeftLegDemo",
-    #"RightLegDemo",
+    "LeftLeg",
+    "RightLeg",
 
     #"AbdominalSurgery",
     #"RemovalSurgery",
@@ -29,6 +29,8 @@ reusable = [
     "VascularSurgeryTorso",
     "VascularSurgeryLeftArm",
     "VascularSurgeryRightArm",
+    "VascularSurgeryLeftLeg",
+    "VascularSurgeryRightLeg",
 
 ]
 
@@ -53,14 +55,20 @@ unique = [
     "FybrinogenLocalTorso",
     "FybrinogenLocalLeftArm",
     "FybrinogenLocalRightArm",
+    "FybrinogenLocalLeftLeg",
+    "FybrinogenLocalRightLeg",
 
     "UrcaineTorso",
     "UrcaineLeftArm",
     "UrcaineRightArm",
+    "UrcaineLeftLeg",
+    "UrcaineRightLeg",
 
     "FirstAidKitTorso",
     "FirstAidKitLeftArm",
     "FirstAidKitRightArm",
+    "FirstAidKitLeftLeg",
+    "FirstAidKitRightLeg",
 
     "EssenceCita",
     "PlasmoDialite",
@@ -85,19 +93,10 @@ unique = [
     
     "Facehugger",
 
-    "FirstAidKitLeftLeg",
-    "FirstAidKitRightLeg",
-
-    "FybrinogenLocalLeftLeg",
-    "FybrinogenLocalRightLeg",
     "GetAnalysis",
     "MetanolCyanide",
     "MethMorthine",
     "PolyPiroCetam",
-    "UrcaineLeftLeg",
-    "UrcaineRightLeg",
-    "VascularSurgeryLeftLeg",
-    "VascularSurgeryRightLeg",
 	
     "RandomEventGood",
     "RandomEventEvil",
