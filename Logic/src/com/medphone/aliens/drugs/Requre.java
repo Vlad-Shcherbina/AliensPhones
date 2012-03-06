@@ -14,11 +14,11 @@ public class Requre extends AliensProcess {
 		case 0:
 			addNotification("Жгучий укол!");
 			stage = 1;
-			schedule(2);
+			schedule(3);
 			break;
 		case 1:
 			if (a().hasProcess(new LiverWound().getName())) {
-				addNotification("В ране на корпусе образовались какие-то " +
+				a().die("В ране на корпусе образовались какие-то " +
 						"фиброзные спайки и я умер{/ла}.");
 			}
 			a().cancelProcess("LeftArm");

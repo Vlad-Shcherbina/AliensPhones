@@ -242,7 +242,7 @@ public class AliensEngine extends Engine {
 		die("Я умер{/ла}");
 	}
 
-	void die(String msg) {
+	public void die(String msg) {
 		if (alive) {
 			addNotification(msg);
 			important();
@@ -292,6 +292,7 @@ public class AliensEngine extends Engine {
 	
 	void addBloodStatus() {
 		
+		boolean hasFriz = hasProcess(new Friz().getName(), 2);
 		boolean hasWar =
 				hasProcess(new Warfareen().getName(), 2)
 			 || hasProcess(new WarfareenSalicylat().getName(), 2);
@@ -321,6 +322,9 @@ public class AliensEngine extends Engine {
 			
 			if (hasWar)
 				k -= 2;
+			
+			if (hasFriz)
+				k -= 1;
 			
 			if (k < 0)
 				k = 0;
@@ -375,6 +379,9 @@ public class AliensEngine extends Engine {
 
 		int speed = 30; // per hour
 
+		if (hasFriz)
+			speed = 0;
+		
 		if (hasProcess(new Erpoiteen().getName()))
 			speed *= 20;
 		
@@ -421,7 +428,7 @@ public class AliensEngine extends Engine {
 				addStatus(ic("у меня лёгкий кашель"));
 			else
 				addStatus(ic("! у меня жесточайший кровавый кашель"));
-			addStatus("частое дыхание");
+			addStatus("задыхаюсь");
 			setWeakness(3);
 			setPain("Chest", 3);
 		} else if (x < 25) {
@@ -433,7 +440,8 @@ public class AliensEngine extends Engine {
 			setPain("Chest", 2);
 		} else if (x < 50) {
 			if (!maskCough)
-				addStatus(ic("у меня одышка"));
+				addStatus(ic("мучительный кашель"));
+			addStatus("тяжело дышать");
 			setWeakness(2);
 		} else if (x < 75) {
 			if (!maskCough)
@@ -441,7 +449,7 @@ public class AliensEngine extends Engine {
 			setWeakness(1);
 		} else if (x < 100) {
 			if (!maskCough)
-				addStatus(ic("мне тяжело дышать"));
+				addStatus(ic("иногда кашляю"));
 		}
 	}
 
@@ -473,13 +481,13 @@ public class AliensEngine extends Engine {
 		case 2:
 			addStatus(ic("! меня постоянно тошнит"));
 			setWeakness(1);
-			setPain("Stomach", 2); // TODO: правое подреберье?
+			setPain("Stomach", 2);
 			break;
 		case 3:
 		case 4:
 			addStatus(ic("! меня рвёт"));
 			setWeakness(1);
-			setPain("Stomach", 3); // TODO: правое подреберье?
+			setPain("Stomach", 3);
 			break;
 		}
 		if (liver < 0)
@@ -515,7 +523,7 @@ public class AliensEngine extends Engine {
 			break;
 		case 2:
 			addStatus("меня мучает жажда");
-			setPain("Head", 1); // TODO: clarify level
+			setPain("Head", 1);
 			break;
 		case 3:
 			setPain("Loin", 3);
@@ -539,7 +547,6 @@ public class AliensEngine extends Engine {
 				System.out.println("error parsing weakness");
 			}
 		}
-		// TODO: modify by echinospore, friz,
 		
 		if (hasProcess(new MetanolCyanide().getName(), 2) ||
 			hasProcess(new Ehinospore().getName(), 2))
@@ -547,6 +554,10 @@ public class AliensEngine extends Engine {
 		else if (hasProcess(new DichloFlu().getName(), 2) ||
 				 hasProcess(new Ehinospore().getName(), 1))
 			weakness -= 1;
+		
+		if (hasProcess(new Friz().getName(), 2))
+			if (weakness < 3)
+				weakness = 3;
 		
 		int mobility = 0;
 		
@@ -681,10 +692,14 @@ public class AliensEngine extends Engine {
 	
 	void addSepsisStatus() {
 		// TODO: friz slowdown
-		if (sepsis)
-			sepsisHits -= 1+time%2; 
-		else
-			sepsisHits += 1+time%2;
+		boolean hasFriz = hasProcess(new Friz().getName(), 2);
+		
+		if (!hasFriz || time%4 < 2) {
+			if (sepsis)
+				sepsisHits -= 1+time%2; 
+			else
+				sepsisHits += 1+time%2;
+		}
 		
 		if (sepsisHits > 120)
 			sepsisHits = 120;
@@ -696,23 +711,28 @@ public class AliensEngine extends Engine {
 		else if (sepsisHits < 30) {
 			setWeakness(3);
 			setPain("Everywhere", 2);
-			if (maskHeat)
-				addStatus("у меня слегка повышена температура");
-			else {
-				addStatus("* у меня сильный жар");
-				addStatus("(ic) я дрожу");
+			if (!hasFriz) {
+				if (maskHeat)
+					addStatus("у меня слегка повышена температура");
+				else {
+					addStatus("* у меня сильный жар");
+					addStatus("(ic) я дрожу");
+				}
 			}
 		}
 		else if (sepsisHits < 60) {
 			setWeakness(2);
-			if (!maskHeat)
+			if (!maskHeat && !hasFriz)
 				addStatus(ic("* у меня жар"));
 		}
 		else if (sepsisHits < 90) {
 			setWeakness(1);
-			if (!maskHeat)
+			if (!maskHeat && !hasFriz)
 				addStatus("у меня повышенная температура");
 		}
+		
+		if (hasFriz)
+			addStatus("мне холодно");
 			
 	}
 
