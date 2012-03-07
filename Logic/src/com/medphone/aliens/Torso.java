@@ -8,7 +8,6 @@ public class Torso extends AliensProcess {
 
 	public void event() {
 		
-		// TODO: other wounds
 		AliensProcess[] wounds = {
 			new LiverWound(), 
 			new IntestineWound(),

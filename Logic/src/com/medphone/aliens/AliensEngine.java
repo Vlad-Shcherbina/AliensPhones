@@ -10,7 +10,7 @@ import com.medphone.aliens.drugs.*;
 
 public class AliensEngine extends Engine {
 
-	final static String VERSION = "v4.0";
+	final static String VERSION = "v4.1";
 
 	Hashtable used_codes;
 	Hashtable index_by_code = null;
@@ -279,7 +279,7 @@ public class AliensEngine extends Engine {
 		if (p != null && p.stage > 2)
 			return true;
 		p = findProcess(new Queen().getName());
-		if (p != null && p.stage >= 10) // TODO:
+		if (p != null && p.stage >= 10)
 			return true;
 		return false;
 	}
@@ -330,8 +330,6 @@ public class AliensEngine extends Engine {
 			
 			int k = getBleeding(e.process);
 			
-			// TODO: friz
-
 			if (hasEhi && k > 0)
 				k += 1;
 			
@@ -711,7 +709,6 @@ public class AliensEngine extends Engine {
 	}
 	
 	void addSepsisStatus() {
-		// TODO: friz slowdown
 		boolean hasFriz = hasProcess(new Friz().getName(), 2);
 		
 		if (!hasFriz || time%4 < 2) {

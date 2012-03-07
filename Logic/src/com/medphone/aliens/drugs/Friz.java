@@ -21,7 +21,9 @@ public class Friz extends AliensProcess {
 			a().cancelProcess(getName());
 			a().cancelProcess(new FybrinogenLocalLeftArm().getName());
 			a().cancelProcess(new FybrinogenLocalRightArm().getName());
-			// TODO: cancel in other places
+			a().cancelProcess(new FybrinogenLocalLeftLeg().getName());
+			a().cancelProcess(new FybrinogenLocalRightLeg().getName());
+
 			a().cancelProcess(new Healer().getName());
 			a().cancelProcess(new Requre().getName());
 			a().cancelProcess(new Surfaktant().getName());
