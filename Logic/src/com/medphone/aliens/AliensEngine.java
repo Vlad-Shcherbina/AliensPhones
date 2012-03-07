@@ -273,6 +273,10 @@ public class AliensEngine extends Engine {
 		return hasProcess(new Facehugger().getName()) ||
 				hasProcess(new Queen().getName());
 	}
+
+	public boolean hasMatureAlien() {
+		return hasAlien(); // TODO:
+	}
 	
 	public boolean operationSuccessful(String loc) {
 		return

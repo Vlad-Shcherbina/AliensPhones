@@ -23,7 +23,7 @@ public class Facehugger extends AliensProcess {
 			delAttr("unconscious");
 			addNotification("Что это было? Наверное, под газ попал{/а}...");
 			stage = 2;
-			schedule(60);
+			schedule(120);
 			break;
 		default:
 			if (stage % 2 == 0) {

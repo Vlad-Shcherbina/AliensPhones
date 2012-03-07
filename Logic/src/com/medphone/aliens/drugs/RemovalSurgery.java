@@ -10,18 +10,35 @@ public class RemovalSurgery extends TorsoSurgery {
 	}
 
 	public void onSuccess() {
-		if (a().hasAlien()) {
+		/*
+QSBLH - Чужинец успешно извлечен
+WNDBQ - Чужинец метался и порвал
+WTTCG - Королеву успешно извлекли
+		 */
+		if (a().hasMatureAlien()) {
 			if (a().hasProcess(new Friz().getName()) &&
 				a().hasProcess(new Citosolute().getName())) {
+				addNotification("* Врач извлек какие-то пораженные ткани...");
+				addNotification("* (Игрок! Перепиши следующий код на пробирку)");
+				if (a().hasProcess(new Queen().getName()))
+					addNotification("* (Код: WTTCG)");
+				else
+					addNotification("* (Код: QSBLH)");
+				
 				addNotification("* Уже зашивают. Как быстро!");
-				addNotification("* Извлечёна странная недоразвитая хрень.");
-				addNotification("* Код для анализатора - ZZZZZ.");
 				a().cancelProcess(new Facehugger().getName());
 				a().cancelProcess(new Queen().getName());
 			}
 			else {
-				addNotification("* Чужинец задёргался при приближении скальпеля.");
-				a().die("Порванный чужинцем, я умер{/ла}.");
+				addNotification("* (Игрок! Перепиши следующий код на пробирку)");
+				addNotification("* (Код: WNDBQ)");
+				addNotification("* Врач стал что-то делать...");
+				addNotification("* ВНЕЗАПНО что-то пошло не так!");
+				addNotification("* БОЛЬ!! ОРУ ИЗО ВСЕХ СИЛ! ");
+				addNotification("* Червяк с зубастой башкой рвется и шипит в ране!");
+				addNotification("* Кровь и кислота льются во все стороны!");
+				addNotification("* Грудь разорванна, не могу вдохнуть!");
+				a().die("Все вокруг темнеет... Я умер{/ла}.");
 			}
 		}
 		else {

@@ -9,27 +9,26 @@ public class Erupt extends AliensProcess {
 	public void event() {
 		switch (stage) {
 		case 0:
-			if (a().hasAlien())
+			if (a().hasMatureAlien())
 				addNotification("* Кажется, ничего не произошло.");
 			else {
 				addNotification("* Ничего не произошло.");
 				break;
 			}
 			stage = 1;
-			schedule(10);
+			schedule(13);
 			break;
 		case 1:
-			if (a().hasAlien()) {
-				stage = 2;
-				setAttr("unconscious", "zzz");
-				schedule(1);
+			if (a().hasMatureAlien()) {
+				addNotification("* Дыхание перехватило, что-то шевелится!");
+				addNotification("* БООЛЬ! Падаю, корчусь, не могу вдохнуть!");
+				addNotification("* Кажется отпустило...");
+				addNotification("* Что-то в боку колет!!");
+				addNotification("* БООООЛЬ!! Выгибаюсь и ору от боли!!");
+				addNotification("* Зловешее шипение, из грудной клетки вылезла зубастая башка!");
+				addNotification("* Не могу вдохнуть, все вокруг темнеет...");
+				a().die("Я умер{/ла}.");
 			}
-			break;
-		case 2:
-			addNotification("* У меня в груди что-то зашевелилось.");
-			addNotification("* Оттуда выскочил грибо-червяк.");
-			addNotification("* МЯСО.");
-			a().die("Чужинец резво ускакал, а я умер{/ла}.");
 			break;
 		}
 

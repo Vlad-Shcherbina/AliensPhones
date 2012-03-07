@@ -35,8 +35,10 @@ public class Yellow extends AliensProcess {
 		else if (dmg > 10)
 			addNotification("Я закашлял{ся/ась}, у меня закружилась голова.");
 		
-		if (dmg > a().lungsRenewable + a().lungs - 28)
-			dmg = a().lungsRenewable + a().lungs - 28; // to avoid instant death
+		int cap = a().lungsRenewable + a().lungs - 28;
+		
+		if (dmg > cap && cap > 0)
+			dmg = cap; // to avoid instant death
 		
 		a().lungsRenewable -= dmg;
 		if (a().lungs < 0) {

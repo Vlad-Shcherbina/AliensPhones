@@ -96,14 +96,11 @@ unique = [
     "RandomEventEvil",
     "Facehugger",
 
+    "GetAnalysis",
+
 
     "***break***",
 
-    
-
-    "GetAnalysis",
-    "MetanolCyanide",
-    "MethMorthine",
     "PolyPiroCetam",
 	
     "RandomEventGood",

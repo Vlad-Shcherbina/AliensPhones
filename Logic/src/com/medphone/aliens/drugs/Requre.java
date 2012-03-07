@@ -18,8 +18,7 @@ public class Requre extends AliensProcess {
 			break;
 		case 1:
 			if (a().hasProcess(new LiverWound().getName())) {
-				a().die("В ране на корпусе образовались какие-то " +
-						"фиброзные спайки и я умер{/ла}.");
+				a().die("Кишки скрутило в жгучий клубок и я умер{/ла}.");
 			}
 			a().cancelProcess("LeftArm");
 			a().cancelProcess("RightArm");

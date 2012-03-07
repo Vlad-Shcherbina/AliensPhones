@@ -12,14 +12,14 @@ public class IntestineWound extends AliensProcess {
 			addNotification("Я ранен{/а} в живот!");
 			stage = 1;
 			if (a().rand(10) < 8)
-				setAttr("bleeding", "1");
+				setAttr("bleeding", "2");
 			else
 				setAttr("bleeding", "3");
 			setAttr("painStomach", "3");
 			// fall through
 		case 1:
 			a().sepsis = true;
-			schedule(5);
+			schedule(2);
 			break;
 		}
 	}

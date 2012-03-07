@@ -11,7 +11,7 @@ public class LiverWound extends AliensProcess {
 		case 0:
 			addNotification("Я ранен{/а} в живот справа!");
 			stage = 1;
-			setAttr("bleeding", "1");
+			setAttr("bleeding", "2");
 			setAttr("painStomach", a().rand(2) == 0 ? "2" : "3");
 			// fall through
 		case 1:
