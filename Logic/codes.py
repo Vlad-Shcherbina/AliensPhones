@@ -1,19 +1,21 @@
 reusable = [
-    "Backdoors", # placeholder
+    #"Backdoors", # placeholder
+
     "Reset",
+    "Cross",
     "DebugProcess",
     "DamageLungs",
 
-    "Queen",
-    "Evolve",
     "Erupt",
+    "Queen",
+    "Larva",
+    "Pupa",
 
     "UnbearablePain",
     "LiverWound",
     "IntestineWound",
     "LungWound",
 
-    "Cross",
     "Safe",
     "Gasp",
     "Resp",

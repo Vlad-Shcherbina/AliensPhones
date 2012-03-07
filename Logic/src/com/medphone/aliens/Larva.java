@@ -2,17 +2,17 @@ package com.medphone.aliens;
 
 import com.medphone.Process;
 
-public class Evolve extends AliensProcess {
+public class Larva extends AliensProcess {
 
 	public String getName() {
-		return "Evolve";
+		return "Larva";
 	}
 
 	
 	public void event() {
 		switch (stage) {
 		case 0:
-			if (a().hasAlien())
+			if (a().hasProcess(new Queen().getName()))
 				addNotification("* Кажется, ничего не произошло.");
 			else {
 				addNotification("* Ничего не произошло.");
@@ -22,17 +22,9 @@ public class Evolve extends AliensProcess {
 			schedule(10);
 			break;
 		case 1:
-			Process p;
-			p = a().findProcess(new Facehugger().getName());
+			Process p = a().findProcess(new Queen().getName());
 			if (p != null)
-				p.stage = 6;
-			p = a().findProcess(new Queen().getName());
-			// TODO
-			/*if (p != null) {
-				if (p.stage < )
 				p.stage = 10;
-			}*/
-			
 		}
 
 	}

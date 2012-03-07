@@ -275,7 +275,13 @@ public class AliensEngine extends Engine {
 	}
 
 	public boolean hasMatureAlien() {
-		return hasAlien(); // TODO:
+		Process p = findProcess(new Facehugger().getName());
+		if (p != null && p.stage > 2)
+			return true;
+		p = findProcess(new Queen().getName());
+		if (p != null && p.stage >= 10) // TODO:
+			return true;
+		return false;
 	}
 	
 	public boolean operationSuccessful(String loc) {
