@@ -10,7 +10,7 @@ import com.medphone.aliens.drugs.*;
 
 public class AliensEngine extends Engine {
 
-	final static String VERSION = "v0.1";
+	final static String VERSION = "v4.0";
 
 	Hashtable used_codes;
 	Hashtable index_by_code = null;
@@ -864,7 +864,7 @@ public class AliensEngine extends Engine {
 		if (!conscious) {
 			for (int i = 0; i < status.size(); i++) {
 				String s = (String) status.elementAt(i);
-				if (!s.startsWith("* "))
+				if (!s.startsWith("*"))
 					status.removeElementAt(i--);
 			}
 			status.insertElementAt("* я без сознания", 0);

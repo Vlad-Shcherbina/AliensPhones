@@ -23,7 +23,7 @@ import com.medphone.aliens.AliensEngine;
 
 public class Main extends MIDlet implements CommandListener {
 
-	static final int TICK_DURATION = 10*1000;
+	static final int TICK_DURATION = 60*1000;
 	static final int NOTIFICATION = 5*1000;
 	
 	private Display display;
@@ -90,7 +90,7 @@ public class Main extends MIDlet implements CommandListener {
 				code = "";
 				setMainText(status);
 
-				Alert a = new Alert(" ", "Перечитай текст", null, AlertType.ALARM);
+				Alert a = new Alert(" ", "(Перечитай текст)", null, AlertType.ALARM);
 				a.setTimeout(300);
 				
 				display.setCurrent(a, mainScreen);

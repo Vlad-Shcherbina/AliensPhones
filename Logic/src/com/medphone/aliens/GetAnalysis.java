@@ -18,7 +18,7 @@ public class GetAnalysis extends AliensProcess {
 		if (!a().poisoning.equals(a().NO_POISONING))
 			s += "XMPQC; ";
 		
-		if (!a().hasMatureAlien())
+		if (a().hasMatureAlien())
 			s += "SWPXK; ";
 		
 		if (a().liver <= 200)
