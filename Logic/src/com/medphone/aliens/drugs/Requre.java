@@ -1,7 +1,9 @@
 package com.medphone.aliens.drugs;
 
 import com.medphone.aliens.AliensProcess;
+import com.medphone.aliens.IntestineWound;
 import com.medphone.aliens.LiverWound;
+import com.medphone.aliens.LungWound;
 
 public class Requre extends AliensProcess {
 
@@ -17,7 +19,9 @@ public class Requre extends AliensProcess {
 			schedule(3);
 			break;
 		case 1:
-			if (a().hasProcess(new LiverWound().getName())) {
+			if (a().hasProcess(new LiverWound().getName()) ||
+				a().hasProcess(new IntestineWound().getName()) ||
+				a().hasProcess(new LungWound().getName())) {
 				a().die("Кишки скрутило в жгучий клубок и я умер{/ла}.");
 			}
 			a().cancelProcess("LeftArm");

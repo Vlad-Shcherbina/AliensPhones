@@ -10,7 +10,7 @@ import com.medphone.aliens.drugs.*;
 
 public class AliensEngine extends Engine {
 
-	final static String VERSION = "v4.1";
+	final static String VERSION = "v4.2";
 
 	Hashtable used_codes;
 	Hashtable index_by_code = null;
